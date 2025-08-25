@@ -1,4 +1,3 @@
-
 const supabaseClient = supabase.createClient(
     'https://nelzhukmxrgdoarsxcek.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lbHpodWtteHJnZG9hcnN4Y2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMDIxNzUsImV4cCI6MjA3MTU3ODE3NX0.KHvfJHVimKwiraEzbyZWyLnTO5P5VEvM86GlyE7y09k'
@@ -97,6 +96,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     calendar.render();
+    await renderFutureEventsReport();
 
     supabaseClient
         .channel('events')
@@ -127,7 +127,62 @@ document.addEventListener('DOMContentLoaded', async function () {
             }]);
             form.reset();
             calendar.refetchEvents();
+            await renderFutureEventsReport();
 
         }
     });
+
+
+    function formatDateBR(dateStr) {
+        const [year, month, day] = dateStr.split('-');
+        return `${day}/${month}/${year}`;
+    }
+
+    async function renderFutureEventsReport() {
+        const today = new Date().toISOString().split('T')[0];
+
+        const { data, error } = await supabaseClient
+            .from('events')
+            .select('title, type, start_date, end_date, users(name, color)')
+            .gte('end_date', today);
+
+        if (error) {
+            console.error('Erro ao buscar eventos futuros e vigentes:', error);
+            return;
+        }
+
+        const list = document.getElementById('future-events-list');
+        list.innerHTML = '';
+
+        if (data.length === 0) {
+            list.innerHTML = '<li>Nenhum evento futuro ou vigente encontrado.</li>';
+            return;
+        }
+
+        function formatDateOnly(dateStr) {
+            // Remove time if present and format as dd/mm/yyyy
+            const [year, month, day] = dateStr.split('T')[0].split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        function getAdjustedEndDate(dateStr) {
+            // Subtract one day from end_date for display
+            const date = new Date(dateStr);
+            date.setDate(date.getDate() - 1);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${day}/${month}/${year}`;
+        }
+
+        data.forEach(ev => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+            <strong style="color:${ev.users?.color || '#333'}">${ev.title}</strong>
+            (${ev.type}) - ${ev.users?.name || 'Usuário'}<br>
+            De ${formatDateOnly(ev.start_date)} até ${getAdjustedEndDate(ev.end_date)}
+        `;
+            list.appendChild(li);
+        });
+    }
 });

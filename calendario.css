@@ -127,3 +127,42 @@ ul {
 li {
     margin-bottom: 8px;
 }
+
+
+/* Estilo para o relatório de eventos futuros */
+#future-events-report {
+    margin: 30px auto;
+    padding: 20px;
+    background: #e6f7ee;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 139, 69, 0.08);
+    max-width: 600px;
+    width: 100%;
+}
+
+#future-events-report h2 {
+    color: #00662d;
+    font-size: 1.4em;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+#future-events-report ul {
+    padding-left: 0;
+    margin: 0;
+}
+
+#future-events-report li {
+    background: #fff;
+    border-left: 4px solid #008b45;
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    color: #333;
+    transition: background 0.2s;
+}
+
+#future-events-report li:hover {
+    background: #f0f8f4;
+}

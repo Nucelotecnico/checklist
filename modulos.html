@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Núcleo-Técnico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="modulos.css">
+
+
+</head>
+
+
+<body>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 24px;">
+        <h1 id="titulo"
+            style="font-family:'Roboto Slab', 'Georgia', serif; font-size:2.8em; color:#184d27; letter-spacing:2px; font-weight:900; padding:10px 12px; margin:0;">
+            PORTAL NÚCLEO TÉCNICO
+        </h1>
+    </div>
+    <br>
+
+    <div class="menu-container">
+        <button id="btn-home" class="menu-btn" onclick="location.href='index.html'">Home</button>
+        <button id="btn-checklist" class="menu-btn" onclick="location.href='checklist.html'">Checklist</button>
+        <button id="btn-fluxos" class="menu-btn" onclick="location.href='fluxos.html'">Fluxos</button>
+        <button id="btn-calendario" class="menu-btn" onclick="location.href='calendario.html'">Calendário</button>
+        <button id="btn-links" class="menu-btn" onclick="location.href='links.html'">Links</button>
+        <button id="btn-modulos" class="menu-btn" onclick="location.href='modulos.html'">Módulos
+            <br>Homologados</button>
+        <button id="btn-reserva5" class="menu-btn" onclick="location.href='#diagramas'">Reserva5</button>
+        <button id="btn-reserva6" class="menu-btn" onclick="location.href='#parametros'">Reserva6</button>
+        <button id="btn-reserva7" class="menu-btn" onclick="location.href='#relatorio'">Reserva7</button>
+        <button id="btn-reserva8" class="menu-btn" onclick="location.href='#contato'">Reserva8</button>
+
+    </div>
+
+    <h1 style="display:inline-block; vertical-align:middle; padding: 0px 0px;">MÓDULOS BLINDADOS HOMOLOGADOS</h1>
+
+
+    <!-- Formulário de cadastro -->
+  <div id="formularioCadastro" style="background: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px #0001; max-width: 600px; margin-bottom: 30px; margin-left: auto; margin-right: auto;">
+    <h1 style="text-align: center;">Cadastro de arquivos em PDF</h1>
+    <form id="formProjeto">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+        <div style="flex: 1 1 200px;">
+          <label for="nomeProjeto" style="font-weight: bold;">Nome do Projeto:</label>
+          <input type="text" id="nomeProjeto" required style="width: 100%; box-sizing: border-box;">
+        </div>
+        <div style="flex: 1 1 200px;">
+          <label for="arquivoPDF" style="font-weight: bold;">Arquivo PDF:</label>
+          <input type="file" id="arquivoPDF" accept="application/pdf" required style="width: 100%;">
+        </div>
+        <div style="display: flex; align-items: flex-end;">
+          <button type="submit" style="background: #3498db; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Enviar</button>
+        </div>
+      </div>
+    </form>
+  <!-- </div> -->
+
+  <!-- Campo de busca -->
+  <!-- <div style="max-width: 600px; margin: 0 auto;"> -->
+    <h2>Buscar Projeto</h2>
+    <input type="text" id="buscaProjeto" placeholder="Digite o nome do projeto ou * para listar todos">
+    <button id="btnBuscar">Buscar</button>
+  </div>
+
+  <!-- Área de resultados -->
+  <div id="resultado"></div>
+
+    <script type="module"src="modulos.js"></script>
+</body>
+
+</html>
