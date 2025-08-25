@@ -8,10 +8,48 @@ body {
   align-items: center;
 }
 
+/* No arquivo checklist.css */
+.menu-btn {
+  background: #00662d;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-family: Roboto;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.menu-btn:hover {
+  background: #b37504;
+  /* Cor mais escura no hover */
+  transform: translateY(-2px);
+  /* Efeito adicional */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.menu-btn:active {
+  background: #003318;
+  /* Cor ainda mais escura ao clicar */
+  transform: translateY(0);
+}
+
+/* Container dos botões */
+.menu-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+
+}
+
 h1 {
   text-align: center;
   color: #000000;
 }
+
+/*fim das configurações basicas*/
 
 table {
   width: 70%;
@@ -59,41 +97,8 @@ tr.analise {
   background-color: #fffde7;
 }
 
-/* No arquivo checklist.css */
-.menu-btn {
-  background: #00662d;
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  font-family: Roboto;
-  font-weight: bold;
-  transition: background 0.2s ease;
-}
 
-.menu-btn:hover {
-  background: #b37504;
-  /* Cor mais escura no hover */
-  transform: translateY(-2px);
-  /* Efeito adicional */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
 
-.menu-btn:active {
-  background: #003318;
-  /* Cor ainda mais escura ao clicar */
-  transform: translateY(0);
-}
-
-/* Container dos botões */
-.menu-container {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin: 20px 0;
-
-}
 
 
 
@@ -152,20 +157,3 @@ tr.analise {
 
 
 
-/*SVG*/
-.gear {
-  width: 120px;
-  height: 120px;
-  animation: spin 3s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-/*------------------------*/
