@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Núcleo-Técnico</title>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /> -->
+    <link rel="stylesheet" href="conversor.css">
+
+</head>
+
+<body>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 24px;">
+        <h1 id="titulo"
+            style="font-family:'Roboto Slab', 'Georgia', serif; font-size:2.8em; color:#184d27; letter-spacing:2px; font-weight:900; padding:10px 12px; margin:0;">
+            PORTAL NÚCLEO TÉCNICO
+        </h1>
+    </div>
+
+
+    <div class="menu-container">
+        <button id="btn-home" class="menu-btn" onclick="location.href='index.html'">Home</button>
+        <button id="btn-checklist" class="menu-btn" onclick="location.href='checklist.html'">Checklist</button>
+        <button id="btn-fluxos" class="menu-btn" onclick="location.href='fluxos.html'">Fluxos</button>
+        <button id="btn-calendario" class="menu-btn" onclick="location.href='calendario.html'">Calendário</button>
+        <button id="btn-links" class="menu-btn" onclick="location.href='links.html'">Links</button>
+        <button id="btn-modulos" class="menu-btn" onclick="location.href='modulos.html'">Módulos
+            <br>Homologados</button>
+        <button id="btn-conversor" class="menu-btn"
+            onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
+        <button id="btn-reserva6" class="menu-btn" onclick="location.href='#parametros'">Reserva6</button>
+        <button id="btn-reserva7" class="menu-btn" onclick="location.href='#relatorio'">Reserva7</button>
+        <button id="btn-reserva8" class="menu-btn" onclick="location.href='#contato'">Reserva8</button>
+
+    </div>
+
+    <h1 style="display:inline-block; vertical-align:middle; padding: 0px 0px;">Conversão de Coordenadas e Medição de
+        Distância</h1>
+
+    <div class="container">
+        <div class="box">
+            <h3>📍 Coordenada 1</h3>
+            <label>Formato:
+                <select id="formato1" onchange="atualizarCampos(1)">
+                    <option value="geo">Geográfica</option>
+                    <option value="utm">UTM</option>
+                </select>
+            </label><br>
+            <div id="campos1"></div>
+        </div>
+
+        <div class="box">
+            <h3>📍 Coordenada 2</h3>
+            <label>Formato:
+                <select id="formato2" onchange="atualizarCampos(2)">
+                    <option value="geo">Geográfica</option>
+                    <option value="utm">UTM</option>
+                </select>
+            </label><br>
+            <div id="campos2"></div>
+        </div>
+    </div>
+
+    <button onclick="converterEPlotar()">Converter e Medir</button>
+    <div class="result" id="resultado"></div>
+
+    <br><br><br><br><br><br><br>
+    <div id="map"></div>
+    <br>
+
+
+
+
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+    <script src="conversor.js"></script>
+
+
+
+
+</body>
+
+</html>
