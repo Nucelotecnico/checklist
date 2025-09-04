@@ -148,11 +148,32 @@ function converterEPlotar() {
     const distancia = haversine(p1Geo.lat, p1Geo.lon, p2Geo.lat, p2Geo.lon);
 
     document.getElementById("resultado").innerText =
-        `📍 Coordenada 1:\nLatitude: ${p1Geo.lat.toFixed(5)}\nLongitude: ${p1Geo.lon.toFixed(5)}\n` +
-        `UTM: Zona ${p1UTM.zona}${p1UTM.hemisferio}, Easting: ${p1UTM.easting.toFixed(2)}, Northing: ${p1UTM.northing.toFixed(2)}\n\n` +
-        `📍 Coordenada 2:\nLatitude: ${p2Geo.lat.toFixed(5)}\nLongitude: ${p2Geo.lon.toFixed(5)}\n` +
-        `UTM: Zona ${p2UTM.zona}${p2UTM.hemisferio}, Easting: ${p2UTM.easting.toFixed(2)}, Northing: ${p2UTM.northing.toFixed(2)}\n\n` +
+        `📍 Coordenada 1 (Geográfica):\n` +
+        `Latitude: ${p1Geo.lat.toFixed(5)}\n` +
+        `Longitude: ${p1Geo.lon.toFixed(5)}\n` +
+        `📍 Coordenada 1 (UTM):\n` +
+        `Zona: ${p1UTM.zona}${p1UTM.hemisferio}\n` +
+        `Easting: ${p1UTM.easting.toFixed(2)}\n` +
+        `Northing: ${p1UTM.northing.toFixed(2)}\n\n` +
+        `📍 Coordenada 2 (Geográfica):\n` +
+        `Latitude: ${p2Geo.lat.toFixed(5)}\n` +
+        `Longitude: ${p2Geo.lon.toFixed(5)}\n` +
+        `📍 Coordenada 2 (UTM):\n` +
+        `Zona: ${p2UTM.zona}${p2UTM.hemisferio}\n` +
+        `Easting: ${p2UTM.easting.toFixed(2)}\n` +
+        `Northing: ${p2UTM.northing.toFixed(2)}\n\n` +
         `📏 Distância:\n${(distancia / 1000).toFixed(3)} km (${distancia.toFixed(2)} m)`;
+
+    const resultadoDiv = document.getElementById("resultado");
+    if (resultadoDiv.innerText.trim() !== "") {
+        resultadoDiv.classList.add("result");
+        resultadoDiv.style.background = "#fff";
+        resultadoDiv.style.display = "block";
+    } else {
+        resultadoDiv.classList.remove("result");
+        resultadoDiv.style.background = "";
+        resultadoDiv.style.display = "none";
+    }
 
     if (marker1) map.removeLayer(marker1);
     if (marker2) map.removeLayer(marker2);
@@ -164,3 +185,11 @@ function converterEPlotar() {
 
     map.fitBounds(line.getBounds(), { padding: [50, 50] });
 }
+
+
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        converterEPlotar();
+    }
+});
