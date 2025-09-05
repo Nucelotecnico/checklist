@@ -186,3 +186,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 });
+
+
+document.getElementById('toggle-users-btn').addEventListener('click', function() {
+    const userDiv = document.getElementById('user-manager');
+    userDiv.style.display = userDiv.style.display === 'none' ? 'block' : 'none';
+});

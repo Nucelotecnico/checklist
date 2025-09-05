@@ -1,9 +1,8 @@
 
-document.addEventListener("DOMContentLoaded", function() {
-  const numerons = carregarNumerons();
-  // Faça o que for necessário com numerons, por exemplo:
-  // console.log(numerons);
-});
+// document.addEventListener("DOMContentLoaded", function() {
+//   const numerons = carregarNumerons();
+
+// });
 
 window.onload = function () {
   const numerons = localStorage.getItem('numerons') || '';
@@ -95,15 +94,20 @@ function aplicarCor(row, status) {
   else if (status === "analise") row.classList.add("analise");
   else if (status === "reprovado") row.classList.add("reprovado");
   else row.classList.add("vazio");
+
+  console.log('Status:', status, 'Classes:', row.className);
 }
 
 function salvarTabela(tabelaId) {
   const tabela = document.getElementById(tabelaId);
   const dados = [];
   tabela.querySelectorAll("tbody tr").forEach(row => {
-    const item = row.querySelector("td").textContent;
-    const status = row.querySelector("select").value;
-    const observacao = row.querySelector("textarea").value;
+    const td = row.querySelector("td");
+    const item = td ? td.textContent : "";
+    const select = row.querySelector("select");
+    const textarea = row.querySelector("textarea");
+    const status = select ? select.value : "";
+    const observacao = textarea ? textarea.value : "";
     dados.push({ item, status, observacao });
   });
   localStorage.setItem(`checklist_${tabelaId}`, JSON.stringify(dados));
@@ -132,17 +136,20 @@ function inicializarEventos(tabelaId) {
     const select = row.querySelector("select");
     const textarea = row.querySelector("textarea");
 
-    select.addEventListener("change", () => {
-      aplicarCor(row, select.value);
-      salvarTabela(tabelaId);
-    });
+    if (select) {
+      select.addEventListener("change", () => {
+        aplicarCor(row, select.value);
+        salvarTabela(tabelaId);
+      });
+    }
 
-    textarea.addEventListener("input", () => {
-      salvarTabela(tabelaId);
-    });
+    if (textarea) {
+      textarea.addEventListener("input", () => {
+        salvarTabela(tabelaId);
+      });
+    }
   });
 }
-
 function mostrarTabelaSelecionada() {
   todasTabelas.forEach(t => t.style.display = "none");
   const tabelaId = seletor.value;

@@ -19,12 +19,18 @@ function atualizarCampos(id) {
           <label>Longitude: <input type="number" id="lon${id}" step="0.00001"></label><br>
         `;
     } else {
-        container.innerHTML = `
-          <label>Zona: <input type="number" id="zona${id}" step="1"></label><br>
-          <label>Hemisfério (N/S): <input type="text" id="hem${id}" maxlength="1"></label><br>
-          <label>Easting: <input type="number" id="east${id}" step="0.01"></label><br>
-          <label>Northing: <input type="number" id="north${id}" step="0.01"></label><br>
-        `;
+container.innerHTML = `
+  <label>Zona:
+    <select id="zona${id}">
+      <option value="22">22</option>
+      <option value="23" selected>23</option>
+      <option value="24">24</option>
+    </select>
+  </label><br>
+  <label>Hemisfério (S): <input type="text" id="hem${id}" value="S" readonly></label><br>
+  <label>Easting: <input type="number" id="east${id}" step="0.01"></label><br>
+  <label>Northing: <input type="number" id="north${id}" step="0.01"></label><br>
+`;
     }
 }
 
@@ -105,9 +111,89 @@ function haversine(lat1, lon1, lat2, lon2) {
     return R * c;
 }
 
+//função para validar campos 
+
+function validarCamposGeo(latId, lonId) {
+    const latStr = document.getElementById(latId).value.trim();
+    const lonStr = document.getElementById(lonId).value.trim();
+    const lat = parseFloat(latStr);
+    const lon = parseFloat(lonStr);
+
+    // Regex: deve começar com "-", depois dígitos, ponto ou vírgula, e mais dígitos
+    const regex = /^-\d{1,2}([.,]\d+)?$/;
+
+    if (!regex.test(latStr)) {
+        alert("Latitude deve ser negativa e no formato -xx.xxxxxx ou -xx,xxxxxx.");
+        return false;
+    }
+    if (!regex.test(lonStr)) {
+        alert("Longitude deve ser negativa e no formato -xx.xxxxxx ou -xx,xxxxxx.");
+        return false;
+    }
+    if (isNaN(lat) || isNaN(lon)) {
+        alert("Preencha latitude e longitude corretamente.");
+        return false;
+    }
+    if (lat < -90 || lat > 0) {
+        alert("Latitude deve estar entre -90 e 0.");
+        return false;
+    }
+    if (lon < -180 || lon > 0) {
+        alert("Longitude deve estar entre -180 e 0.");
+        return false;
+    }
+    return true;
+}
+
+function validarCamposUTM(zonaId, hemId, eastId, northId) {
+    const zona = parseInt(document.getElementById(zonaId).value);
+    const hem = document.getElementById(hemId).value.toUpperCase();
+    const east = parseFloat(document.getElementById(eastId).value);
+    const north = parseFloat(document.getElementById(northId).value);
+    if (![22, 23, 24].includes(zona)) {
+        alert("Zona UTM deve ser 22, 23 ou 24.");
+        return false;
+    }
+    if (hem !== 'S') {
+        alert("Hemisfério deve ser 'S'.");
+        return false;
+    }
+    if (isNaN(east) || isNaN(north)) {
+        alert("Easting e Northing devem ser números.");
+        return false;
+    }
+    if (east < 100000 || east > 900000) {
+        alert("Easting deve estar entre 100.000 e 900.000 metros.");
+        return false;
+    }
+    if (north < 0 || north > 10000000) {
+        alert("Northing deve estar entre 0 e 10.000.000 metros para o hemisfério sul.");
+        return false;
+    }
+    return true;
+}
+
+//----------
+
+
+
+
 function converterEPlotar() {
     const formato1 = document.getElementById("formato1").value;
     const formato2 = document.getElementById("formato2").value;
+
+     // Validação dos campos antes de processar
+    if (formato1 === "geo") {
+        if (!validarCamposGeo("lat1", "lon1")) return;
+    } else {
+        if (!validarCamposUTM("zona1", "hem1", "east1", "north1")) return;
+    }
+
+    if (formato2 === "geo") {
+        if (!validarCamposGeo("lat2", "lon2")) return;
+    } else {
+        if (!validarCamposUTM("zona2", "hem2", "east2", "north2")) return;
+    }
 
     let p1Geo, p2Geo, p1UTM, p2UTM;
 

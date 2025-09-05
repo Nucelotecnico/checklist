@@ -148,8 +148,10 @@
         <button id="btn-links" class="menu-btn" onclick="location.href='links.html'">Links</button>
         <button id="btn-modulos" class="menu-btn" onclick="location.href='modulos.html'">Módulos
             <br>Homologados</button>
-        <button id="btn-conversor" class="menu-btn" onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
-        <button id="btn-controlens" class="menu-btn" onclick="location.href='controlens.html'">Controle<br>Análises</button>
+        <button id="btn-conversor" class="menu-btn"
+            onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
+        <button id="btn-controlens" class="menu-btn"
+            onclick="location.href='controlens.html'">Controle<br>Análises</button>
         <button id="btn-reserva7" class="menu-btn" onclick="location.href='#relatorio'">Reserva7</button>
         <button id="btn-reserva8" class="menu-btn" onclick="location.href='#contato'">Reserva8</button>
 
@@ -221,7 +223,14 @@
         <div
             style="max-width: 400px; width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 10px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px;">
             <h2 style="text-align: center;">Buscar Análises</h2>
-            <input type="text" id="search" placeholder="Buscar por NS..." style="width: 300px;">
+<input type="text" id="search" placeholder="Buscar por NS..." style="width: 300px;">
+<select id="searchStatus" style="width: 300px; margin-top: 8px;">
+    <option value="">Todos os Status</option>
+    <option value="andamento">Andamento</option>
+    <option value="analise">Em Análise</option>
+    <option value="concluido">Concluído</option>
+</select>
+<button id="btn-buscar" style="width: 120px; margin-top: 8px;">Buscar</button>
         </div>
     </div>
 
@@ -265,12 +274,20 @@
             return localDate.toISOString().slice(0, 19); // remove o 'Z'
         }
 
-        async function carregarAnalises(nsFiltro = '') {
-            const { data, error } = await supabase
+        async function carregarAnalises(nsFiltro = '', statusFiltro = '') {
+            let query = supabase
                 .from('controle_analise')
                 .select('*')
-                .ilike('ns', `%${nsFiltro}%`)
                 .order('id', { ascending: false });
+
+            if (nsFiltro) {
+                query = query.ilike('ns', `%${nsFiltro}%`);
+            }
+            if (statusFiltro) {
+                query = query.eq('status', statusFiltro);
+            }
+
+            const { data, error } = await query;
 
             if (error) {
                 console.error('Erro ao buscar:', error);
@@ -282,16 +299,16 @@
                 const linha = document.createElement('tr');
                 linha.className = status;
                 linha.innerHTML = `
-                <td>${ns}</td>
-                <td>${inField || ''}</td>
-                <td>${rt || ''}</td>
-                <td>${email || ''}</td>
-                <td>${telefone || ''}</td>
-                <td>${prazo || ''}</td>
-                <td>${status}</td>
-                <td>${observacao || ''}</td>
-                <td>${data_analise ? new Date(data_analise).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : ''}</td>
-            `;
+        <td>${ns}</td>
+        <td>${inField || ''}</td>
+        <td>${rt || ''}</td>
+        <td>${email || ''}</td>
+        <td>${telefone || ''}</td>
+        <td>${prazo ? new Date(prazo).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : ''}</td>
+        <td>${status}</td>
+        <td>${observacao || ''}</td>
+        <td>${data_analise ? new Date(data_analise).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : ''}</td>
+    `;
                 tabela.appendChild(linha);
             });
         }
@@ -344,6 +361,23 @@
                 tabela.innerHTML = ''; // limpa a tabela se o campo estiver vazio
             }
         });
+
+
+        const searchStatus = document.getElementById('searchStatus');
+
+        function atualizarBusca() {
+            const filtroNS = search.value.trim();
+            const filtroStatus = searchStatus.value;
+            carregarAnalises(filtroNS, filtroStatus);
+        }
+
+        document.getElementById('btn-buscar').addEventListener('click', atualizarBusca);
+
+        // search.addEventListener('input', atualizarBusca);
+        // searchStatus.addEventListener('change', atualizarBusca);
+
+        // Carrega todas as análises ao iniciar
+        //carregarAnalises();
     </script>
 </body>
 

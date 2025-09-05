@@ -42,8 +42,10 @@
         <button id="btn-links" class="menu-btn" onclick="location.href='links.html'">Links</button>
         <button id="btn-modulos" class="menu-btn" onclick="location.href='modulos.html'">Módulos
             <br>Homologados</button>
-        <button id="btn-conversor" class="menu-btn" onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
-        <button id="btn-controlens" class="menu-btn" onclick="location.href='controlens.html'">Controle<br>Análises</button>
+        <button id="btn-conversor" class="menu-btn"
+            onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
+        <button id="btn-controlens" class="menu-btn"
+            onclick="location.href='controlens.html'">Controle<br>Análises</button>
         <button id="btn-reserva7" class="menu-btn" onclick="location.href='#relatorio'">Reserva7</button>
         <button id="btn-reserva8" class="menu-btn" onclick="location.href='#contato'">Reserva8</button>
 
@@ -54,19 +56,27 @@
 
 
     <div id="containergeral">
+
+
         <div id="user-container" style="flex: 0 0 320px; max-width:100px;">
-            <h3>Gerenciar Usuários</h3>
-            <form id="user-form">
-                <label for="user-name">Nome:</label>
-                <input type="text" id="user-name" required>
+            <button id="toggle-users-btn">Gerenciar Usuários</button>
+            <div id="user-manager" style="display:none;">
+                <!-- Seu formulário e lista de usuários aqui -->
 
-                <label for="user-color">Cor:</label>
-                <input type="color" id="user-color" value="#ff0000" required>
+                <h3>Gerenciar Usuários</h3>
+                <form id="user-form">
+                    <label for="user-name">Nome:</label>
+                    <input type="text" id="user-name" required>
 
-                <button type="submit">Cadastrar Usuário</button>
-            </form>
+                    <label for="user-color">Cor:</label>
+                    <input type="color" id="user-color" value="#ff0000" required>
 
-            <ul id="user-list"></ul>
+                    <button type="submit">Cadastrar Usuário</button>
+                </form>
+
+                <ul id="user-list"></ul>
+
+            </div>
         </div>
 
         <div id="form-container" style="flex: 0 0 320px; max-width:150px;">
