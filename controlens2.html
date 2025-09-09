@@ -148,10 +148,8 @@
         <button id="btn-links" class="menu-btn" onclick="location.href='links.html'">Links</button>
         <button id="btn-modulos" class="menu-btn" onclick="location.href='modulos.html'">Módulos
             <br>Homologados</button>
-        <button id="btn-conversor" class="menu-btn"
-            onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
-        <button id="btn-controlens" class="menu-btn"
-            onclick="location.href='controlens.html'">Controle<br>Análises</button>
+        <button id="btn-conversor" class="menu-btn" onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
+        <button id="btn-controlens" class="menu-btn" onclick="location.href='controlens.html'">Controle<br>Análises</button>
         <button id="btn-reserva7" class="menu-btn" onclick="location.href='#relatorio'">Reserva7</button>
         <button id="btn-reserva8" class="menu-btn" onclick="location.href='#contato'">Reserva8</button>
 
@@ -168,12 +166,12 @@
             <h2 style="text-align: center;">Registro de Análises</h2>
             <form id="form" style="display: flex; flex-direction: column; gap: 10px;">
                 <div style="display: flex; align-items: center;">
-                    <label for="ns" style="width: 120px; text-align: left;" maxlength="10">Número NS</label>
+                    <label for="ns" style="width: 120px; text-align: left;">Número NS</label>
                     <input type="text" id="ns" placeholder="Número NS" required style="flex: 1;">
                 </div>
                 <div id="restante-campos" style="display: none; flex-direction: column; gap: 10px;">
                     <div style="display: flex; align-items: center;">
-                        <label for="in" style="width: 120px; text-align: left;" maxlength="10">IN</label>
+                        <label for="in" style="width: 120px; text-align: left;">IN</label>
                         <input type="text" id="in" placeholder="IN" style="flex: 1;">
                     </div>
                     <div style="display: flex; align-items: center;">
@@ -210,7 +208,6 @@
         </div>
         <script>
             const nsInput = document.getElementById('ns');
-            const inInput = document.getElementById('in');
             const restanteCampos = document.getElementById('restante-campos');
             nsInput.addEventListener('input', function () {
                 if (nsInput.value.trim().length > 0) {
@@ -218,46 +215,13 @@
                 } else {
                     restanteCampos.style.display = 'none';
                 }
-                if (nsInput.value.length > 10) {
-                    alert('Número NS deve ter no máximo 10 caracteres.');
-                    nsInput.value = nsInput.value.slice(0, 10);
-                }
-            });
-            inInput.addEventListener('input', function () {
-                if (inInput.value.length > 10) {
-                    alert('IN deve ter no máximo 10 caracteres.');
-                    inInput.value = inInput.value.slice(0, 10);
-                }
             });
         </script>
 
         <div
             style="max-width: 400px; width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 10px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px;">
             <h2 style="text-align: center;">Buscar Análises</h2>
-            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="text" id="search" placeholder="Buscar por NS..." style="width: 100%;">
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <select id="searchStatus" style="width: 100%;">
-                        <option value="">Todos os Status</option>
-                        <option value="andamento">Andamento</option>
-                        <option value="analise">Em Análise</option>
-                        <option value="concluido">Concluído</option>
-                    </select>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <label for="dataInicio" style="font-weight:bold; min-width: 90px;">Data início:</label>
-                    <input type="date" id="dataInicio" style="flex: 1;">
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <label for="dataFim" style="font-weight:bold; min-width: 90px;">Data final:</label>
-                    <input type="date" id="dataFim" style="flex: 1;">
-                </div>
-                <div style="display: flex; justify-content: flex-end;">
-                    <button id="btn-buscar" style="width: 100%;">Buscar</button>
-                </div>
-            </div>
+            <input type="text" id="search" placeholder="Buscar por NS..." style="width: 300px;">
         </div>
     </div>
 
@@ -301,26 +265,12 @@
             return localDate.toISOString().slice(0, 19); // remove o 'Z'
         }
 
-        async function carregarAnalises(nsFiltro = '', statusFiltro = '', dataInicio = '', dataFim = '') {
-            let query = supabase
+        async function carregarAnalises(nsFiltro = '') {
+            const { data, error } = await supabase
                 .from('controle_analise')
                 .select('*')
+                .ilike('ns', `%${nsFiltro}%`)
                 .order('id', { ascending: false });
-
-            if (nsFiltro) {
-                query = query.ilike('ns', `%${nsFiltro}%`);
-            }
-            if (statusFiltro) {
-                query = query.eq('status', statusFiltro);
-            }
-            if (dataInicio) {
-                query = query.gte('data_analise', dataInicio + 'T00:00:00');
-            }
-            if (dataFim) {
-                query = query.lte('data_analise', dataFim + 'T23:59:59');
-            }
-
-            const { data, error } = await query;
 
             if (error) {
                 console.error('Erro ao buscar:', error);
@@ -332,16 +282,16 @@
                 const linha = document.createElement('tr');
                 linha.className = status;
                 linha.innerHTML = `
-    <td>${ns}</td>
-    <td>${inField || ''}</td>
-    <td>${rt || ''}</td>
-    <td>${email || ''}</td>
-    <td>${telefone || ''}</td>
-    <td>${prazo ? new Date(prazo).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : ''}</td>
-    <td>${status}</td>
-    <td>${observacao || ''}</td>
-    <td>${data_analise ? new Date(data_analise).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : ''}</td>
-`;
+                <td>${ns}</td>
+                <td>${inField || ''}</td>
+                <td>${rt || ''}</td>
+                <td>${email || ''}</td>
+                <td>${telefone || ''}</td>
+                <td>${prazo || ''}</td>
+                <td>${status}</td>
+                <td>${observacao || ''}</td>
+                <td>${data_analise ? new Date(data_analise).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : ''}</td>
+            `;
                 tabela.appendChild(linha);
             });
         }
@@ -359,16 +309,6 @@
             const observacao = document.getElementById('obs').value.trim();
             const data_analise = getBrasiliaISODate();
 
-            // Validação para não permitir salvar se NS ou IN tiver mais de 10 caracteres
-            if (ns.length > 10) {
-                alert('Número NS deve ter no máximo 10 caracteres.');
-                return;
-            }
-            if (inField.length > 10) {
-                alert('IN deve ter no máximo 10 caracteres.');
-                return;
-            }
-
             const registro = {
                 ns,
                 in: inField,
@@ -379,6 +319,7 @@
                 observacao,
                 data_analise
             };
+
             if (prazoInput) {
                 registro.prazo = prazoInput;
             }
@@ -403,25 +344,6 @@
                 tabela.innerHTML = ''; // limpa a tabela se o campo estiver vazio
             }
         });
-
-
-        const searchStatus = document.getElementById('searchStatus');
-
-        function atualizarBusca() {
-            const filtroNS = search.value.trim();
-            const filtroStatus = searchStatus.value;
-            const dataInicio = document.getElementById('dataInicio').value;
-            const dataFim = document.getElementById('dataFim').value;
-            carregarAnalises(filtroNS, filtroStatus, dataInicio, dataFim);
-        }
-
-        document.getElementById('btn-buscar').addEventListener('click', atualizarBusca);
-
-        // search.addEventListener('input', atualizarBusca);
-        // searchStatus.addEventListener('change', atualizarBusca);
-
-        // Carrega todas as análises ao iniciar
-        //carregarAnalises();
     </script>
 </body>
 
