@@ -19,20 +19,21 @@
   </div>
   <br>
 
-    <div class="menu-container">
-        <button id="btn-home" class="menu-btn" onclick="location.href='index.html'">Home</button>
-        <button id="btn-checklist" class="menu-btn" onclick="location.href='checklist.html'">Checklist</button>
-        <button id="btn-fluxos" class="menu-btn" onclick="location.href='fluxos.html'">Fluxos</button>
-        <button id="btn-calendario" class="menu-btn" onclick="location.href='calendario.html'">Calendário</button>
-        <button id="btn-links" class="menu-btn" onclick="location.href='links.html'">Links</button>
-        <button id="btn-modulos" class="menu-btn" onclick="location.href='modulos.html'">Módulos
-            <br>Homologados</button>
-        <button id="btn-conversor" class="menu-btn" onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
-        <button id="btn-controlens" class="menu-btn" onclick="location.href='controlens.html'">Controle<br>Análises</button>
-        <button id="btn-reserva7" class="menu-btn" onclick="location.href='#relatorio'">Reserva7</button>
-        <button id="btn-reserva8" class="menu-btn" onclick="location.href='#contato'">Reserva8</button>
+  <div class="menu-container">
+    <button id="btn-home" class="menu-btn" onclick="location.href='index.html'">Home</button>
+    <button id="btn-checklist" class="menu-btn" onclick="location.href='checklist.html'">Checklist</button>
+    <button id="btn-fluxos" class="menu-btn" onclick="location.href='fluxos.html'">Fluxos</button>
+    <button id="btn-calendario" class="menu-btn" onclick="location.href='calendario.html'">Calendário</button>
+    <button id="btn-links" class="menu-btn" onclick="location.href='links.html'">Links</button>
+    <button id="btn-modulos" class="menu-btn" onclick="location.href='modulos.html'">Módulos
+      <br>Homologados</button>
+    <button id="btn-conversor" class="menu-btn"
+      onclick="location.href='conversor.html'">Conversor<br>Coordenadas</button>
+    <button id="btn-controlens" class="menu-btn" onclick="location.href='controlens.html'">Controle<br>Análises</button>
+    <button id="btn-reserva7" class="menu-btn" onclick="location.href='#relatorio'">Reserva7</button>
+    <button id="btn-reserva8" class="menu-btn" onclick="location.href='#contato'">Reserva8</button>
 
-    </div>
+  </div>
 
   <h1 style="display:inline-block; vertical-align:middle; padding: 0px 0px;">Conversão de Coordenadas e Medição de
     Distância</h1>
@@ -75,6 +76,21 @@
 
 
   <div id="map"></div>
+  <br><br>
+
+  <div class="search-container" style="max-width: 400px; margin: 32px auto 0 auto; padding: 24px 28px; background: #f8fafc; border-radius: 14px; box-shadow: 0 2px 12px rgba(44,62,80,0.09); font-family: 'Roboto', Arial, sans-serif;">
+    <h2 style="margin-top: 0; color: #184d27; font-size: 1.4em; font-weight: 700; letter-spacing: 1px;">Pesquisar RTs</h2>
+    <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+      <input type="text" id="searchInput" placeholder="Digite o nome..." disabled
+        style="flex: 1; padding: 8px 12px; border: 1px solid #b2bec3; border-radius: 6px; font-size: 1em; background: #e9ecef; color: #888;">
+      <button id="searchBtn" disabled
+        style="padding: 8px 18px; background: linear-gradient(90deg,#2980b9 0%,#6dd5fa 100%); color: #fff; border: none; border-radius: 6px; font-weight: 600; font-size: 1em; opacity: 0.7; transition: background 0.2s, box-shadow 0.2s, opacity 0.2s; cursor: not-allowed;"
+        onmouseover="this.style.background='linear-gradient(90deg,#2471a3 0%,#48c6ef 100%)'; this.style.boxShadow='0 4px 16px rgba(44,62,80,0.15)'; this.style.opacity='1';"
+        onmouseout="this.style.background='linear-gradient(90deg,#2980b9 0%,#6dd5fa 100%)'; this.style.boxShadow='none'; this.style.opacity='0.7';"
+      >Pesquisar</button>
+    </div>
+    <div class="results" id="results" style="min-height: 32px; color: #555; font-size: 1em;"></div>
+  </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 

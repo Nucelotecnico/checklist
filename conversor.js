@@ -272,6 +272,86 @@ function converterEPlotar() {
     map.fitBounds(line.getBounds(), { padding: [50, 50] });
 }
 
+//funçao para buscar contatos no arquivo listaRTs.txt
+
+let contatos = [];
+
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const resultsDiv = document.getElementById('results');
+
+// Carrega o arquivo automaticamente
+fetch('listaRTs.txt')
+    .then(response => response.text())
+    .then(text => {
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+
+        contatos = lines.map(line => {
+            // Divide por espaços
+            const partes = line.split(/\s+/);
+
+            // Regex para identificar email e telefone
+            const email = partes.find(p => /\S+@\S+\.\S+/.test(p));
+            const telefone = partes.find(p => /\(\d{2}\)\d{4,5}-\d{4}/.test(p));
+
+            // Remove email e telefone do array para sobrar só o nome
+            const nome = partes.filter(p => p !== email && p !== telefone).join(' ');
+
+            return { nome, email, telefone };
+        });
+
+        searchInput.disabled = false;
+        searchBtn.disabled = false;
+        resultsDiv.innerHTML = '<div>✅ Arquivo carregado. Agora pesquise pelo nome.</div>';
+    })
+    .catch(() => {
+        resultsDiv.innerHTML = '<div>❌ Erro ao carregar o arquivo de contatos.</div>';
+    });
+
+    searchBtn.addEventListener('click', function () {
+    const query = searchInput.value.toLowerCase();
+    resultsDiv.innerHTML = '';
+    if (query.length === 0) return;
+
+    const filtered = contatos.filter(c =>
+        (c.nome && c.nome.toLowerCase().includes(query)) ||
+        (c.email && c.email.toLowerCase().includes(query)) ||
+        (c.telefone && c.telefone.toLowerCase().includes(query))
+    );
+
+    if (filtered.length === 0) {
+        resultsDiv.innerHTML = '<div>Nenhum contato encontrado.</div>';
+        return;
+    }
+
+    filtered.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'result-item';
+        item.innerHTML = `
+                    <div style="text-align: left;"><strong>Nome:</strong> ${c.nome || '—'}</div>
+                    <div style="text-align: left;"><strong>Email:</strong> ${c.email || '—'}</div>
+                    <div style="text-align: left;"><strong>Telefone:</strong> ${c.telefone || '—'}</div>
+                `; resultsDiv.appendChild(item);
+    });
+
+    if (filtered.length > 0) {
+        // Armazena o primeiro contato encontrado no localStorage
+        var contato = filtered[0];
+        localStorage.setItem('contato_nome', contato.nome || '');
+        localStorage.setItem('contato_email', contato.email || '');
+        localStorage.setItem('contato_telefone', contato.telefone || '');
+    }
+
+
+
+
+});
+
+
+
+
+
+
 
 
 document.addEventListener("keydown", function(event) {
