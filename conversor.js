@@ -189,11 +189,31 @@ function converterEPlotar() {
         if (!validarCamposUTM("zona1", "hem1", "east1", "north1")) return;
     }
 
+    // if (formato2 === "geo") {
+    //     if (!validarCamposGeo("lat2", "lon2")) return;
+    // } else {
+    //     if (!validarCamposUTM("zona2", "hem2", "east2", "north2")) return;
+    // }
+
+    //-----------codigo novo 
+        // Tenta validar a coordenada 2, mas só se algum campo estiver preenchido
+    let coord2Preenchida = false;
     if (formato2 === "geo") {
-        if (!validarCamposGeo("lat2", "lon2")) return;
+        const lat2 = document.getElementById("lat2").value.trim();
+        const lon2 = document.getElementById("lon2").value.trim();
+        coord2Preenchida = lat2 !== "" && lon2 !== "";
+        if (coord2Preenchida && !validarCamposGeo("lat2", "lon2")) return;
     } else {
-        if (!validarCamposUTM("zona2", "hem2", "east2", "north2")) return;
+        const east2 = document.getElementById("east2").value.trim();
+        const north2 = document.getElementById("north2").value.trim();
+        coord2Preenchida = east2 !== "" && north2 !== "";
+        if (coord2Preenchida && !validarCamposUTM("zona2", "hem2", "east2", "north2")) return;
     }
+
+
+    //-----------
+
+
 
     let p1Geo, p2Geo, p1UTM, p2UTM;
 
@@ -213,6 +233,40 @@ function converterEPlotar() {
         p1UTM = { zona, hemisferio: hem, easting: east, northing: north };
         p1Geo = utmParaGeo(zona, hem, east, north);
     }
+
+
+//---------codigo novo 
+// Se a coordenada 2 não foi preenchida, só mostra a 1 no mapa
+    if (!coord2Preenchida) {
+        document.getElementById("resultado").innerText =
+            `📍 Coordenada 1 (Geográfica):\n` +
+            `Latitude: ${p1Geo.lat.toFixed(5)}\n` +
+            `Longitude: ${p1Geo.lon.toFixed(5)}\n` +
+            `📍 Coordenada 1 (UTM):\n` +
+            `Zona: ${p1UTM.zona}${p1UTM.hemisferio}\n` +
+            `Easting: ${p1UTM.easting.toFixed(2)}\n` +
+            `Northing: ${p1UTM.northing.toFixed(2)}\n`;
+
+        const resultadoDiv = document.getElementById("resultado");
+        resultadoDiv.classList.add("result");
+        resultadoDiv.style.background = "#fff";
+        resultadoDiv.style.display = "block";
+
+        if (marker1) map.removeLayer(marker1);
+        if (marker2) map.removeLayer(marker2);
+        if (line) map.removeLayer(line);
+
+        marker1 = L.marker([p1Geo.lat, p1Geo.lon]).addTo(map).bindPopup("Coordenada 1").openPopup();
+
+        map.setView([p1Geo.lat, p1Geo.lon], 15);
+        return;
+    }
+
+    //---------------
+
+
+
+
 
     // Coordenada 2
     if (formato2 === "geo") {
