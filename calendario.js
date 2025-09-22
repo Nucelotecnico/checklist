@@ -151,6 +151,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             return;
         }
 
+        // Ordena os eventos pelo start_date (data de início)
+        data.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
+
         const list = document.getElementById('future-events-list');
         list.innerHTML = '';
 
@@ -178,17 +181,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         data.forEach(ev => {
             const li = document.createElement('li');
             li.innerHTML = `
-            <strong style="color:${ev.users?.color || '#333'}">${ev.title}</strong>
-            (${ev.type}) - ${ev.users?.name || 'Usuário'}<br>
-            De ${formatDateOnly(ev.start_date)} até ${getAdjustedEndDate(ev.end_date)}
-        `;
+        <strong style="color:${ev.users?.color || '#333'}">${ev.title}</strong>
+        (${ev.type}) - ${ev.users?.name || 'Usuário'}<br>
+        De ${formatDateOnly(ev.start_date)} até ${getAdjustedEndDate(ev.end_date)}
+    `;
             list.appendChild(li);
         });
     }
 });
 
 
-document.getElementById('toggle-users-btn').addEventListener('click', function() {
+document.getElementById('toggle-users-btn').addEventListener('click', function () {
     const userDiv = document.getElementById('user-manager');
     userDiv.style.display = userDiv.style.display === 'none' ? 'block' : 'none';
 });
