@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <link rel="stylesheet" href="animacao.css">
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <link rel="stylesheet" href="home.css">
+
+</head>
+
+<body>
+  <div class="container">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <div id="icon-corner" style="width: 60px; height: 40px; margin-bottom: 10px;"></div>
+
+      <svg viewBox="0 0 350 350" style="width: 50%; height: 30%;">
+        <!-- Eixos -->
+        <line x1="50" y1="350" x2="550" y2="350" class="eixo" />
+        <line x1="50" y1="50" x2="50" y2="350" class="eixo" />
+        <!-- Curva de tempo definido -->
+        <polyline class="curva-definida" fill="none" stroke="#00ff88" stroke-width="3" stroke-dasharray="1000"
+          stroke-dashoffset="1000" points="100,50,50, 50, 50,200, 200,200,200,350, 200,200" />
+
+      </svg>
+
+    </div>
+    <h2>COORDINATION WEB</h2>
+    <form onsubmit="return verificarLogin()">
+      <label>Usuário:</label>
+      <input type="text" id="usuario" required>
+      <label>Senha:</label>
+      <input type="password" id="senha" required>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+  </div>
+
+  <script src="home.js"></script>
+
+
+
+
+  
+</body>
+
+</html>
