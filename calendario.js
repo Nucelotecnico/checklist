@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         events: async function (fetchInfo, successCallback, failureCallback) {
             const { data, error } = await supabaseClient
                 .from('events')
-                .select('id, title, start_date, end_date, users(name, color)');
+                .select('id,title,start_date,end_date,users(name,color)');
 
             if (error) {
                 console.error('Erro ao buscar eventos:', error);
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const { data, error } = await supabaseClient
             .from('events')
-            .select('title, type, start_date, end_date, users(name, color)')
+            .select('title,type,start_date,end_date,users(name,color)')
             .gte('end_date', today);
 
         if (error) {
