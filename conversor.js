@@ -1,4 +1,15 @@
 
+let valor="conversorCoordenadas"; // Valor padrão
+
+
+document.getElementById('ferramentaSelector').addEventListener('change', function () {
+    valor = this.value;
+    console.log("Valor selecionado 1:", valor); // Adicione este log para depuração
+    document.getElementById('conversorCoordenadas').style.display = valor === 'conversorCoordenadas' ? 'block' : 'none';
+    document.getElementById('PesquisarRTs').style.display = valor === 'PesquisarRTs' ? 'block' : 'none';
+    document.getElementById('equipamentosaterramento').style.display = valor === 'equipamentosaterramento' ? 'block' : 'none';
+});
+
 
 
 let map = L.map('map').setView([-17.5, -45.5], 5);
@@ -19,7 +30,7 @@ function atualizarCampos(id) {
           <label>Longitude: <input type="number" id="lon${id}" step="0.00001"></label><br>
         `;
     } else {
-container.innerHTML = `
+        container.innerHTML = `
   <label>Zona:
     <select id="zona${id}">
       <option value="22">22</option>
@@ -182,7 +193,7 @@ function converterEPlotar() {
     const formato1 = document.getElementById("formato1").value;
     const formato2 = document.getElementById("formato2").value;
 
-     // Validação dos campos antes de processar
+    // Validação dos campos antes de processar
     if (formato1 === "geo") {
         if (!validarCamposGeo("lat1", "lon1")) return;
     } else {
@@ -196,7 +207,7 @@ function converterEPlotar() {
     // }
 
     //-----------codigo novo 
-        // Tenta validar a coordenada 2, mas só se algum campo estiver preenchido
+    // Tenta validar a coordenada 2, mas só se algum campo estiver preenchido
     let coord2Preenchida = false;
     if (formato2 === "geo") {
         const lat2 = document.getElementById("lat2").value.trim();
@@ -235,8 +246,8 @@ function converterEPlotar() {
     }
 
 
-//---------codigo novo 
-// Se a coordenada 2 não foi preenchida, só mostra a 1 no mapa
+    //---------codigo novo 
+    // Se a coordenada 2 não foi preenchida, só mostra a 1 no mapa
     if (!coord2Preenchida) {
         document.getElementById("resultado").innerText =
             `📍 Coordenada 1 (Geográfica):\n` +
@@ -326,6 +337,13 @@ function converterEPlotar() {
     map.fitBounds(line.getBounds(), { padding: [50, 50] });
 }
 
+
+
+
+
+
+
+
 //funçao para buscar contatos no arquivo listaRTs.txt
 
 let contatos = [];
@@ -362,7 +380,7 @@ fetch('listaRTs.txt')
         resultsDiv.innerHTML = '<div>❌ Erro ao carregar o arquivo de contatos.</div>';
     });
 
-    searchBtn.addEventListener('click', function () {
+searchBtn.addEventListener('click', function () {
     const query = searchInput.value.toLowerCase();
     resultsDiv.innerHTML = '';
     if (query.length === 0) return;
@@ -403,16 +421,165 @@ fetch('listaRTs.txt')
 
 
 
+//-------CODIGO DA BUSCA EQUIPAMENTOS DE ATERRAMENTOS INICIO---------------------
+
+const tabelas = {
+    reator: {
+        "13.8": [
+            { max: 500, x: 50.8, i1: 6.3, i2: 126 },
+            { max: 1000, x: 25.4, i1: 12.6, i2: 251 },
+            { max: 2000, x: 12.7, i1: 25.1, i2: 502 },
+            { max: 3000, x: 8.5, i1: 37.7, i2: 753 },
+            { max: 4000, x: 7.1, i1: 50.2, i2: 1004 },
+            { max: 5000, x: 5.7, i1: 62.8, i2: 1255 }
+        ],
+        "22": [
+            { max: 500, x: 129.1, i1: 3.9, i2: 79 },
+            { max: 1000, x: 64.5, i1: 7.9, i2: 157 },
+            { max: 2000, x: 33.3, i1: 15.7, i2: 315 },
+            { max: 3000, x: 21.5, i1: 23.6, i2: 472 },
+            { max: 4000, x: 18.2, i1: 31.5, i2: 630 },
+            { max: 5000, x: 14.5, i1: 39.4, i2: 787 }
+        ],
+        "34.5": [
+            { max: 500, x: 317.4, i1: 2.5, i2: 50 },
+            { max: 1000, x: 158.7, i1: 5.0, i2: 100 },
+            { max: 2000, x: 79.4, i1: 10.0, i2: 201 },
+            { max: 3000, x: 52.9, i1: 15.1, i2: 301 },
+            { max: 4000, x: 44.6, i1: 20.1, i2: 402 },
+            { max: 5000, x: 35.7, i1: 25.1, i2: 502 }
+        ]
+    },
+    zigzag: {
+        "13.8": [
+            { max: 500, x: 171.4, ifase1: 2.1, ineutro1: 6.3, ifase2: 42, ineutro2: 126 },
+            { max: 1000, x: 85.7, ifase1: 4.2, ineutro1: 12.6, ifase2: 84, ineutro2: 251 },
+            { max: 2000, x: 42.8, ifase1: 8.4, ineutro1: 25.1, ifase2: 167, ineutro2: 502 },
+            { max: 3000, x: 28.6, ifase1: 12.6, ineutro1: 37.7, ifase2: 251, ineutro2: 753 },
+            { max: 4000, x: 23.8, ifase1: 16.7, ineutro1: 50.2, ifase2: 335, ineutro2: 1004 },
+            { max: 5000, x: 19.0, ifase1: 20.9, ineutro1: 62.8, ifase2: 418, ineutro2: 1255 }
+        ],
+        "22": [
+            { max: 500, x: 435.6, ifase1: 1.3, ineutro1: 3.9, ifase2: 26, ineutro2: 79 },
+            { max: 1000, x: 217.8, ifase1: 2.6, ineutro1: 7.9, ifase2: 52, ineutro2: 157 },
+            { max: 2000, x: 108.9, ifase1: 5.2, ineutro1: 15.7, ifase2: 105, ineutro2: 315 },
+            { max: 3000, x: 72.6, ifase1: 7.9, ineutro1: 23.6, ifase2: 157, ineutro2: 472 },
+            { max: 4000, x: 60.5, ifase1: 10.5, ineutro1: 31.5, ifase2: 210, ineutro2: 630 },
+            { max: 5000, x: 48.4, ifase1: 13.1, ineutro1: 39.4, ifase2: 262, ineutro2: 787 }
+        ],
+        "34.5": [
+            { max: 500, x: 1071.2, ifase1: 0.8, ineutro1: 2.5, ifase2: 17, ineutro2: 50 },
+            { max: 1000, x: 535.6, ifase1: 1.7, ineutro1: 5.0, ifase2: 33, ineutro2: 100 },
+            { max: 2000, x: 267.8, ifase1: 3.3, ineutro1: 10.0, ifase2: 67, ineutro2: 201 },
+            { max: 3000, x: 178.5, ifase1: 5.0, ineutro1: 15.1, ifase2: 100, ineutro2: 301 },
+            { max: 4000, x: 148.8, ifase1: 6.7, ineutro1: 20.1, ifase2: 134, ineutro2: 402 },
+            { max: 5000, x: 119.0, ifase1: 8.4, ineutro1: 25.1, ifase2: 167, ineutro2: 502 }
+        ]
+    },
+    estrela: {
+        "13.8": [
+            { max: 500, ptrafo: 50, x: "4.5%", ifase1: 2.1, ineutro1: 6.3, ifase2: 52, ineutro2: 157 },
+            { max: 1000, ptrafo: 100, x: "4.5%", ifase1: 4.2, ineutro1: 12.6, ifase2: 105, ineutro2: 314 },
+            { max: 2000, ptrafo: 200, x: "4.5%", ifase1: 8.4, ineutro1: 25.1, ifase2: 209, ineutro2: 628 },
+            { max: 3000, ptrafo: 300, x: "4.5%", ifase1: 12.6, ineutro1: 37.7, ifase2: 314, ineutro2: 941 },
+            { max: 4000, ptrafo: 400, x: "5.0%", ifase1: 16.7, ineutro1: 50.2, ifase2: 418, ineutro2: 1255 },
+            { max: 5000, ptrafo: 500, x: "5.0%", ifase1: 20.9, ineutro1: 62.8, ifase2: 523, ineutro2: 1569 }
+        ],
+        "22": [
+            { max: 500, ptrafo: 50, x: "4.5%", ifase1: 1.3, ineutro1: 3.9, ifase2: 33, ineutro2: 98 },
+            { max: 1000, ptrafo: 100, x: "4.5%", ifase1: 2.6, ineutro1: 7.9, ifase2: 66, ineutro2: 197 },
+            { max: 2000, ptrafo: 200, x: "4.5%", ifase1: 5.2, ineutro1: 15.7, ifase2: 131, ineutro2: 394 },
+            { max: 3000, ptrafo: 300, x: "4.5%", ifase1: 7.9, ineutro1: 23.6, ifase2: 197, ineutro2: 590 },
+            { max: 4000, ptrafo: 400, x: "5.0%", ifase1: 10.5, ineutro1: 31.5, ifase2: 262, ineutro2: 787 },
+            { max: 5000, ptrafo: 500, x: "5.0%", ifase1: 13.1, ineutro1: 39.4, ifase2: 328, ineutro2: 984 }
+
+        ],
+        "34.5": [
+            { max: 500, ptrafo: 50, x: "4.5%", ifase1: 0.8, ineutro1: 2.5, ifase2: 21, ineutro2: 63 },
+            { max: 1000, ptrafo: 100, x: "4.5%", ifase1: 1.7, ineutro1: 5.0, ifase2: 42, ineutro2: 126 },
+            { max: 2000, ptrafo: 200, x: "4.5%", ifase1: 3.3, ineutro1: 10.0, ifase2: 84, ineutro2: 251 },
+            { max: 3000, ptrafo: 300, x: "4.5%", ifase1: 5.0, ineutro1: 15.1, ifase2: 126, ineutro2: 377 },
+            { max: 4000, ptrafo: 400, x: "5.0%", ifase1: 6.7, ineutro1: 20.1, ifase2: 167, ineutro2: 502 },
+            { max: 5000, ptrafo: 500, x: "5.0%", ifase1: 8.4, ineutro1: 25.1, ifase2: 209, ineutro2: 628 }
+        ]
+    }
+};
+
+function calcular() {
+    console.log("Cálculo iniciado");
+    const tipo = document.getElementById("tipo").value;
+    const tensao = document.getElementById("tensao").value;
+    const potencia = parseFloat(document.getElementById("potencia").value);
+    const resultado = document.getElementById("resultado2");
+
+    if (isNaN(potencia)) {
+        resultado.innerHTML = "<strong>Informe uma potência válida.</strong>";
+        return;
+    }
+
+    const dados = tabelas[tipo][tensao];
+    console.log("Dados da tabela:", dados);
+    for (let d of dados) {
+        if (potencia <= d.max) {
+            if (tipo === "reator") {
+                resultado.innerHTML = `
+                    <strong>Reator de aterramento (${tensao} kV):</strong><br><br>
+                    Xreator: ${d.x} Ω<br>
+                    Ineutro (regime permanente): ${d.i1} A<br>
+                    Ineutro (curta duração 10s): ${d.i2} A
+                `;
+                resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Reator_de_aterramento.png" alt="Reator de aterramento" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;  
+                resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Reator_de_aterramento_2.png" alt="Reator de aterramento" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
+            } else if (tipo === "zigzag") {
+                resultado.innerHTML = `
+              <strong>Transformador zig-zag (${tensao} kV):</strong><br><br>
+              Xtrafo: ${d.x} Ω<br>
+              Ifase (regime permanente): ${d.ifase1} A<br>
+              Ineutro (regime permanente): ${d.ineutro1} A<br>
+              Ifase (curta duração 10s): ${d.ifase2} A<br>
+              Ineutro (curta duração 10s): ${d.ineutro2} A
+            `;
+            resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Transformador_zigzag_de_aterramento.png" alt="Transformador zig-zag" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
+            } else if (tipo === "estrela") {
+                resultado.innerHTML = `
+              <strong>Transformador estrela-aterrado (${tensao} kV):</strong><br><br>
+              Potência do trafo de aterramento: ${d.ptrafo} kVA<br>
+              Xtrafo: ${d.x}<br>
+              Ifase (regime permanente): ${d.ifase1} A<br>
+              Ineutro (regime permanente): ${d.ineutro1} A<br>
+              Ifase (curta duração 2s): ${d.ifase2} A<br>
+              Ineutro (curta duração 2s): ${d.ineutro2} A
+            `;
+            resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Transformador_neutro_aterrado.png" alt="Transformador estrela-aterrado" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
+            }
+            //console.log(resultado.innerHTML);
+            return;
+            
+        }
+    }
+
+    resultado.innerHTML = "<strong>Faixa de potência não encontrada na tabela.</strong>";
+}
+
+
+
+//-------FIM DA BUSCA EQUIPAMENTOS DE ATERRAMENTOS FIM---------------------
 
 
 
 
 
-document.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
+
+// console.log("valorSelecionado2:", valor);
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" && valor === "conversorCoordenadas") {
         converterEPlotar();
     }
 });
 
 
-
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" && valor === "equipamentosaterramento") {
+        calcular();
+    }
+});

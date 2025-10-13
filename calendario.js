@@ -124,6 +124,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 user_id,
                 start_date: start,
                 end_date: adjustedEnd.toISOString().split('T')[0]
+       
+
             }]);
             form.reset();
             calendar.refetchEvents();
