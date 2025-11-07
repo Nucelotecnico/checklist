@@ -655,7 +655,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (subestacao === "1" || subestacao === "6") {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N1N6_G_MOMENT.png";
+            img.src = "Diagramas_unifilares/SE_N1N6_G_MOMENT.png";
             img.alt = "Diagrama SE_N1N6_G_MOMENT";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -669,7 +669,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (subestacao === "5" || subestacao === "8") {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N5N8_G_MOMENT.png";
+            img.src = "Diagramas_unifilares/SE_N5N8_G_MOMENT.png";
             img.alt = "Diagrama SE_N5N8_G_MOMENT";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -711,7 +711,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "nenhum" && (subestacao === "1" || subestacao === "6")) {
             const img = document.createElement("img");
-            img.src = "/Diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.src = "Diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
             img.alt = "Diagrama SE_N1N6_SEM_GERADOR";//
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -725,7 +725,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "emergencial" && (subestacao === "1" || subestacao === "6")) {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N1N6_G_EMERG.png"; // ajuste o caminho se necessário
+            img.src = "Diagramas_unifilares/SE_N1N6_G_EMERG.png"; // ajuste o caminho se necessário
             img.alt = "Diagrama SE_N1N6_G_EMERG";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -739,7 +739,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "nenhum" && (subestacao === "5" || subestacao === "8")) {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N5N8_SEM_GERADOR.png";
+            img.src = "Diagramas_unifilares/SE_N5N8_SEM_GERADOR.png";
             img.alt = "Diagrama SE_N5N8_SEM_GERADOR";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -753,7 +753,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "emergencial" && (subestacao === "5" || subestacao === "8")) {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N5N8_G_EMERG.png";
+            img.src = "Diagramas_unifilares/SE_N5N8_G_EMERG.png";
             img.alt = "Diagrama SE_N5N8_G_EMERG";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -822,7 +822,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "permanente" && (subestacao === "1" || subestacao === "6")) {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.src = "Diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
             img.alt = "Diagrama SE_N1N6_SEM_GERADOR";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -836,7 +836,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "permanente" && (subestacao === "5" || subestacao === "8")) {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N5N8_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.src = "Diagramas_unifilares/SE_N5N8_SEM_GERADOR.png"; // ajuste o caminho se necessário
             img.alt = "Diagrama SE_N5N8_SEM_GERADOR";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -1009,7 +1009,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
         }
         if (subestacao === "2" || subestacao === "4") {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N2N4_G_MOMENT.png";
+            img.src = "Diagramas_unifilares/SE_N2N4_G_MOMENT.png";
             img.alt = "Diagrama SE_N2N4_G_MOMENT";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -1075,7 +1075,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "nenhum" && (subestacao === "2" || subestacao === "4")) {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N2N4_SEM_GERADOR.png";
+            img.src = "Diagramas_unifilares/SE_N2N4_SEM_GERADOR.png";
             img.alt = "Diagrama SE_N2N4_SEM_GERADOR";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -1089,7 +1089,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "emergencial" && (subestacao === "2" || subestacao === "4")) {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N2N4_G_EMERG.png";
+            img.src = "Diagramas_unifilares/SE_N2N4_G_EMERG.png";
             img.alt = "Diagrama SE_N2N4_G_EMERG";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -1159,7 +1159,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
         // Exibe diagrama "SE_N2N4_SEM_GERADOR"
         if (subestacao === "2" || subestacao === "4") {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N2N4_SEM_GERADOR.png";
+            img.src = "Diagramas_unifilares/SE_N2N4_SEM_GERADOR.png";
             img.alt = "Diagrama SE_N2N4_SEM_GERADOR";
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -1406,5 +1406,3 @@ document.addEventListener("keydown", function (event) {
         calcular();
     }
 });
-
-
