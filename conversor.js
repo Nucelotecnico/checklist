@@ -711,7 +711,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
         if (paralelismo === "nenhum" && (subestacao === "1" || subestacao === "6")) {
             const img = document.createElement("img");
-            img.src = "diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.src = "../diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
             img.alt = "Diagrama SE_N1N6_SEM_GERADOR";//
             img.style.borderRadius = "12px";
             img.style.border = "2px solid #000";
@@ -1406,3 +1406,4 @@ document.addEventListener("keydown", function (event) {
         calcular();
     }
 });
+
