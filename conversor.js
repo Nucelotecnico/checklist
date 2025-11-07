@@ -1,5 +1,5 @@
 
-let valor="conversorCoordenadas"; // Valor padrão
+let valor = "conversorCoordenadas"; // Valor padrão
 
 
 document.getElementById('ferramentaSelector').addEventListener('change', function () {
@@ -8,6 +8,7 @@ document.getElementById('ferramentaSelector').addEventListener('change', functio
     document.getElementById('conversorCoordenadas').style.display = valor === 'conversorCoordenadas' ? 'block' : 'none';
     document.getElementById('PesquisarRTs').style.display = valor === 'PesquisarRTs' ? 'block' : 'none';
     document.getElementById('equipamentosaterramento').style.display = valor === 'equipamentosaterramento' ? 'block' : 'none';
+    document.getElementById('protecoesdegeracao').style.display = valor === 'protecoesdegeracao' ? 'block' : 'none';
 });
 
 
@@ -528,7 +529,7 @@ function calcular() {
                     Ineutro (regime permanente): ${d.i1} A<br>
                     Ineutro (curta duração 10s): ${d.i2} A
                 `;
-                resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Reator_de_aterramento.png" alt="Reator de aterramento" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;  
+                resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Reator_de_aterramento.png" alt="Reator de aterramento" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
                 resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Reator_de_aterramento_2.png" alt="Reator de aterramento" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
             } else if (tipo === "zigzag") {
                 resultado.innerHTML = `
@@ -539,7 +540,7 @@ function calcular() {
               Ifase (curta duração 10s): ${d.ifase2} A<br>
               Ineutro (curta duração 10s): ${d.ineutro2} A
             `;
-            resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Transformador_zigzag_de_aterramento.png" alt="Transformador zig-zag" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
+                resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Transformador_zigzag_de_aterramento.png" alt="Transformador zig-zag" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
             } else if (tipo === "estrela") {
                 resultado.innerHTML = `
               <strong>Transformador estrela-aterrado (${tensao} kV):</strong><br><br>
@@ -550,23 +551,845 @@ function calcular() {
               Ifase (curta duração 2s): ${d.ifase2} A<br>
               Ineutro (curta duração 2s): ${d.ineutro2} A
             `;
-            resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Transformador_neutro_aterrado.png" alt="Transformador estrela-aterrado" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
+                resultado.innerHTML += `<br><img src="Equipamentos_de_aterramento/Transformador_neutro_aterrado.png" alt="Transformador estrela-aterrado" style="width:300px;height:400px;display:block;margin-top:10px;text-align:center;">`;
             }
             //console.log(resultado.innerHTML);
             return;
-            
+
         }
     }
 
     resultado.innerHTML = "<strong>Faixa de potência não encontrada na tabela.</strong>";
 }
 
-
-
 //-------FIM DA BUSCA EQUIPAMENTOS DE ATERRAMENTOS FIM---------------------
 
 
+//INICIO LOGICA PARA AUTOMAÇÃO DE EXIBIÇÃO DA FERRAMENTA DE PROTEÇÕES
 
+const paralelismoRadios = document.querySelectorAll('input[name="paralelismo"]');
+const camposExtras = document.getElementById("camposExtras");
+
+paralelismoRadios.forEach(radio => {
+    radio.addEventListener("change", () => {
+        if ((radio.value === "momentaneo" || radio.value === "emergencial" || radio.value === "nenhum") && radio.checked) {
+            camposExtras.classList.add("ocultar");
+        } else {
+            camposExtras.classList.remove("ocultar");
+        }
+    });
+});
+
+document.getElementById("formulario").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const subestacao = document.querySelector('input[name="subestacao"]:checked')?.value;
+    const paralelismo = document.querySelector('input[name="paralelismo"]:checked')?.value;
+    const injecao = document.querySelector('input[name="injecao"]:checked')?.value;
+    const inversor = document.querySelector('input[name="inversor"]:checked')?.value;
+    const faixa_gd = document.querySelector('input[name="faixa_gd"]:checked')?.value;
+    const parecer = document.querySelector('input[name="parecer"]:checked')?.value;
+
+    const resultadoDiv = document.getElementById("resultado-protecoesdegeracao");
+    resultadoDiv.innerHTML = "";
+
+    //define exibição para proteção de paralelismo momentaneo na BT
+    if ((subestacao === "1" || subestacao === "6" || subestacao === "5" || subestacao === "8") && paralelismo === "momentaneo") {
+        // Centraliza o resultado
+        const circuloDJ = document.createElement("div");
+        circuloDJ.className = "circulo";
+        circuloDJ.style.fontSize = "16px";
+        circuloDJ.style.lineHeight = "80px";
+        circuloDJ.style.display = "flex";
+        circuloDJ.style.alignItems = "center";
+        circuloDJ.style.justifyContent = "center";
+        circuloDJ.style.textAlign = "center";
+        circuloDJ.style.background = "#ffffff"; // fundo branco
+        circuloDJ.style.color = "#000000"; // letra preta
+        circuloDJ.style.border = "2px solid #000000"; // borda preta
+        circuloDJ.textContent = "DJ BT";
+        resultadoDiv.appendChild(circuloDJ);
+
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const circulo32 = document.createElement("div");
+        circulo32.className = "circulo";
+        circulo32.style.fontSize = "16px";
+        circulo32.style.lineHeight = "80px";
+        circulo32.style.display = "flex";
+        circulo32.style.alignItems = "center";
+        circulo32.style.justifyContent = "center";
+        circulo32.style.textAlign = "center";
+        circulo32.style.background = "#ffffff"; // fundo branco
+        circulo32.style.color = "#000000"; // letra preta
+        circulo32.style.border = "2px solid #000000"; // borda preta
+        circulo32.textContent = "32";
+        resultadoDiv.appendChild(circulo32);
+
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        if (subestacao === "1" || subestacao === "6") {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N1N6_G_MOMENT.png";
+            img.alt = "Diagrama SE_N1N6_G_MOMENT";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+        if (subestacao === "5" || subestacao === "8") {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N5N8_G_MOMENT.png";
+            img.alt = "Diagrama SE_N5N8_G_MOMENT";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+
+
+
+    }
+
+    //Condição para emergencia e nenhum paralelismo na BT
+    if ((subestacao === "1" || subestacao === "6" || subestacao === "5" || subestacao === "8") && (paralelismo === "emergencial" || paralelismo === "nenhum")) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "column";
+
+        const circuloDJ = document.createElement("div");
+        circuloDJ.className = "circulo";
+        circuloDJ.style.fontSize = "16px";
+        circuloDJ.style.lineHeight = "80px";
+        circuloDJ.style.display = "flex";
+        circuloDJ.style.alignItems = "center";
+        circuloDJ.style.justifyContent = "center";
+        circuloDJ.style.textAlign = "center";
+        circuloDJ.style.background = "#ffffff"; // fundo branco
+        circuloDJ.style.color = "#000000"; // letra preta
+        circuloDJ.style.border = "2px solid #000000"; // borda preta
+        circuloDJ.textContent = "DJ BT";
+        resultadoDiv.appendChild(circuloDJ);
+
+        if (paralelismo === "nenhum" && (subestacao === "1" || subestacao === "6")) {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N1N6_SEM_GERADOR";//
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+        if (paralelismo === "emergencial" && (subestacao === "1" || subestacao === "6")) {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N1N6_G_EMERG.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N1N6_G_EMERG";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+        if (paralelismo === "nenhum" && (subestacao === "5" || subestacao === "8")) {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N5N8_SEM_GERADOR.png";
+            img.alt = "Diagrama SE_N5N8_SEM_GERADOR";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+        if (paralelismo === "emergencial" && (subestacao === "5" || subestacao === "8")) {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N5N8_G_EMERG.png";
+            img.alt = "Diagrama SE_N5N8_G_EMERG";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+    }
+
+    //Condição para permantente ,com ou sem injeção,com inversor, ate 75 kw , apos ou antes 15/01/2024,se subestação 1,6,5,8
+    if (
+        (subestacao === "1" || subestacao === "6" || subestacao === "5" || subestacao === "8") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "com" &&
+        faixa_gd === "ate_75" &&
+        (parecer === "apos" || parecer === "antes")
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ BT"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        if (paralelismo === "permanente" && (subestacao === "1" || subestacao === "6")) {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N1N6_SEM_GERADOR";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+        if (paralelismo === "permanente" && (subestacao === "5" || subestacao === "8")) {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N5N8_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N5N8_SEM_GERADOR";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+    }
+
+    //Condição para permantente
+    //com ou sem injeção,
+    // com inversor, 
+    // de 75 kw ate 300 kw , 
+    // apos 15/01/2024, 
+    // subestação 1,6,5,8
+    if (
+        (subestacao === "1" || subestacao === "6" || subestacao === "5" || subestacao === "8") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "com" &&
+        faixa_gd === "75_300" &&
+        parecer === "apos"
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ BT", "32⬆️⬇️", "67⬆️", "51v", "27", "59", "81U", "81O", "46"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+    }
+
+    //Condição para permantente
+    //com ou sem injeção,
+    // com inversor, 
+    // de 75 kw ate 300 kw , 
+    // antes 15/01/2024, 
+    // subestação 1,6,5,8
+    if (
+        (subestacao === "1" || subestacao === "6" || subestacao === "5" || subestacao === "8") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "com" &&
+        faixa_gd === "75_300" &&
+        parecer === "antes"
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ BT"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+    }
+
+    //Condição para permantente 
+    //com ou sem injeção
+    //sem inversor
+    //ate 75
+    //antes ou apos 15/01/2024 
+    //subestação 1,6,5,8
+
+    if (
+        (subestacao === "1" || subestacao === "6" || subestacao === "5" || subestacao === "8") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "sem" &&
+        (faixa_gd === "ate_75" || faixa_gd === "75_300") &&
+        (parecer === "apos" || parecer === "antes")
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ BT", "32⬆️⬇️", "67⬆️", "51v", "27", "59", "81U", "81O", "46", "47", "25"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+    }
+
+    //define exibição para proteção de paralelismo momentaneo na MT
+    if ((subestacao === "2" || subestacao === "4") && paralelismo === "momentaneo") {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ MT", "32", "50", "51", "50-N", "51-N"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+        if (subestacao === "2" || subestacao === "4") {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N2N4_G_MOMENT.png";
+            img.alt = "Diagrama SE_N2N4_G_MOMENT";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+
+        }
+
+
+
+
+
+    }
+
+    //Condição para emergencia e nenhum paralelismo na MT
+    if ((subestacao === "2" || subestacao === "4") && (paralelismo === "emergencial" || paralelismo === "nenhum")) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ MT", "50", "51", "50-N", "51-N"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+        // agrupa os círculos já adicionados em um container para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // ajusta resultadoDiv para empilhar verticalmente (funções em cima, imagem em baixo)
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        if (paralelismo === "nenhum" && (subestacao === "2" || subestacao === "4")) {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N2N4_SEM_GERADOR.png";
+            img.alt = "Diagrama SE_N2N4_SEM_GERADOR";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+        if (paralelismo === "emergencial" && (subestacao === "2" || subestacao === "4")) {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N2N4_G_EMERG.png";
+            img.alt = "Diagrama SE_N2N4_G_EMERG";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+    }
+
+    //Condição para permantente ,com ou sem injeção,com inversor, ate 75 kw , antes ou apos 15/01/2024,se subestação 2,4
+    if (
+        (subestacao === "2" || subestacao === "4") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "com" &&
+        faixa_gd === "ate_75" &&
+        (parecer === "apos" || parecer === "antes")
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ MT", "50", "51", "50-N", "51-N"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        // Exibe diagrama "SE_N2N4_SEM_GERADOR"
+        if (subestacao === "2" || subestacao === "4") {
+            const img = document.createElement("img");
+            img.src = "diagramas_unifilares/SE_N2N4_SEM_GERADOR.png";
+            img.alt = "Diagrama SE_N2N4_SEM_GERADOR";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+
+
+
+
+
+
+    }
+
+
+    //Condição para permantente ,com ou sem injeção,com inversor, de 75 ate 300 kw , apos 15/01/2024,se subestação 2,4
+    if (
+        (subestacao === "2" || subestacao === "4") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "com" &&
+        faixa_gd === "75_300" &&
+        parecer === "apos"
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ MT", "32⬆️⬇️", "67⬆️⬇️", "67-N⬆️⬇️", "51v", "27", "59", "81U", "81O", "46"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+    }
+
+    //Condição para permantente ,com ou sem injeção,com inversor, de 75 ate 300 kw , antes 15/01/2024,se subestação 2,4
+    if (
+        (subestacao === "2" || subestacao === "4") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "com" &&
+        faixa_gd === "75_300" &&
+        parecer === "antes"
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ MT", "50", "51", "50-N", "51-N"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+    }
+
+    //Condição para permantente ,com ou sem injeção,com inversor, de 300 ate 2500 kw , antes ou apos 15/01/2024,se subestação 2,4
+    if (
+        (subestacao === "2" || subestacao === "4") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "com" &&
+        faixa_gd === "300_2500" &&
+        (parecer === "apos" || parecer === "antes")
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ MT", "32⬆️⬇️", "67⬆️⬇️", "67-N⬆️⬇️", "51v", "27", "59", "81U", "81O", "46", "Reator"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+    }
+
+
+    //Condição para permantente ,com ou sem injeção,sem inversor, ate 75 ou de 75 a 300, antes ou apos 15/01/2024,se subestação 2,4
+    if (
+        (subestacao === "2" || subestacao === "4") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "sem" &&
+        (faixa_gd === "ate_75" || faixa_gd === "75_300") &&
+        (parecer === "apos" || parecer === "antes")
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ MT", "32⬆️⬇️", "67⬆️⬇️", "67-N⬆️⬇️", "51v", "27", "59", "81U", "81O", "46", "47", "25"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+    }
+
+
+    //Condição para permantente ,com ou sem injeção,sem inversor, de 300 a 2500, apos 15/01/2024,se subestação 2,4
+    if (
+        (subestacao === "2" || subestacao === "4") &&
+        paralelismo === "permanente" &&
+        (injecao === "com" || injecao === "sem") &&
+        inversor === "sem" &&
+        (faixa_gd === "300_2500") &&
+        (parecer === "apos" || parecer === "antes")
+    ) {
+        // Centraliza o resultado
+        resultadoDiv.style.display = "flex";
+        resultadoDiv.style.justifyContent = "center";
+        resultadoDiv.style.alignItems = "center";
+        resultadoDiv.style.flexDirection = "row";
+        resultadoDiv.style.gap = "10px";
+
+        const funcoes = ["DJ MT", "32⬆️⬇️", "67⬆️⬇️", "67-N⬆️⬇️", "51v", "27", "59", "81U", "81O", "46", "47", "25", "Reator"];
+        funcoes.forEach(funcao => {
+            const circulo = document.createElement("div");
+            circulo.className = "circulo";
+            circulo.style.fontSize = "16px";
+            circulo.style.lineHeight = "80px";
+            circulo.style.display = "inline-block";
+            circulo.style.textAlign = "center";
+            circulo.style.background = "#ffffff"; // fundo branco
+            circulo.style.color = "#000000"; // letra preta
+            circulo.style.border = "2px solid #000000"; // borda preta
+            circulo.textContent = funcao;
+            resultadoDiv.appendChild(circulo);
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
+
+// Esconde/mostra a opção "300_2500" de faixa_gd conforme subestação selecionada
+function atualizarFaixaGD() {
+    const faixaGD300_2500 = document.querySelector('input[name="faixa_gd"][value="300_2500"]');
+    if (faixaGD300_2500) {
+        // Garante que o elemento label é o pai correto
+        const label = faixaGD300_2500.closest('label');
+        if (label) {
+            if (
+                document.querySelector('input[name="subestacao"]:checked')?.value === "1" ||
+                document.querySelector('input[name="subestacao"]:checked')?.value === "5" ||
+                document.querySelector('input[name="subestacao"]:checked')?.value === "6" ||
+                document.querySelector('input[name="subestacao"]:checked')?.value === "8"
+            ) {
+                label.style.display = "none";
+            } else {
+                label.style.display = "";
+            }
+        }
+    }
+}
+
+// Executa ao carregar e ao mudar subestação
+atualizarFaixaGD();
+document.querySelectorAll('input[name="subestacao"]').forEach(radio => {
+    radio.addEventListener("change", atualizarFaixaGD);
+});
+//FIM LOGICA PARA AUTOMAÇÃO DE EXIBIÇÃO DA FERRAMENTA DE PROTEÇÕES
 
 
 

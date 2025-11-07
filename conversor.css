@@ -219,3 +219,117 @@ select:focus {
       padding: 15px;
       border-radius: 6px;
     } 
+
+
+    /*estilos para o formulario de proteções de geração*/
+
+          /* body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        } */
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="number"] {
+            margin-top: 5px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .radio-group label {
+            font-weight: normal;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #0078D4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005fa3;
+        }
+
+        .resultado {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .circulo {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            background: #0078D4;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .ocultar {
+            display: none;
+        }
+
+        #camposExtras {
+          background: #ffffff;
+          color: #333;
+          padding: 16px;
+          border-radius: 8px;
+          border: 1px solid #e6e9ec;
+          box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+          box-sizing: border-box;
+          width: 100%;
+          margin-top: 16px;
+        }
+
+        .radio-group {
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          background: #ffffff;
+          padding: 10px;
+          border-radius: 6px;
+          border: 1px solid #e6e9ec;
+          box-shadow: 0 1px 4px rgba(44, 62, 80, 0.04);
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+        }
+

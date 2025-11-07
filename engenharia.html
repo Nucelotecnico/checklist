@@ -524,7 +524,7 @@ filtrados.forEach(registro => {
         async function carregarAssuntos() {
             const { data, error } = await supabase
                 .from('notas')
-                .select('id, assunto')
+                .select('id, assunto, status')
                 .order('created_at', { ascending: false });
 
             const lista = document.getElementById('lista-assuntos');
@@ -536,6 +536,15 @@ filtrados.forEach(registro => {
                     const link = document.createElement('a');
                     link.textContent = registro.assunto;
                     link.href = '#';
+
+                    // diminuir tamanho da letra
+                    link.style.fontSize = '12px'; // ajuste para o tamanho desejado (ex.: '12px', '14px')
+                    link.style.lineHeight = '1.2';
+                    link.style.display = 'inline-block';
+
+                    // cor verde para concluído, azul para em análise
+                    link.style.color = registro.status === 'concluido' ? '#28a745' : '#007bff';
+
                     link.onclick = () => {
                         document.getElementById('busca').value = registro.assunto;
                         buscarRegistros();

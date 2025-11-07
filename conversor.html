@@ -40,17 +40,19 @@
     </label>
     <select id="ferramentaSelector"
       style="padding: 6px 14px; border-radius: 6px; border: 1px solid #b2bec3; font-size: 1em;">
+      <option value="">-- Escolha uma opção --</option>
       <option value="conversorCoordenadas">Conversor de Coordenadas</option>
       <!-- <option value="medidor">Medidor de Distância</option> -->
       <option value="PesquisarRTs">Pesquisar RTs</option>
       <!-- Adicione mais opções conforme necessário -->
       <option value="equipamentosaterramento">Equipamentos de Aterramento</option>
+      <option value="protecoesdegeracao">Proteções de Geração</option>
     </select>
   </div>
 
 
 
-  <div id="conversorCoordenadas">
+  <div id="conversorCoordenadas" style="display:none;">
     <h1 style="display:inline-block; vertical-align:middle; padding: 0px 0px;">CONVERSÃO DE COORDENADAS E MEDIDOR DE
       DISTÂNCIA
     </h1>
@@ -137,6 +139,83 @@
   </div>
 
 
+  <div id="protecoesdegeracao" style="display:none;">
+
+    <h1>Proteções por tipo de Subestações</h1>
+    <form id="formulario">
+      <label>Tipo de Subestação</label>
+      <div class="radio-grid" style="display: grid; grid-template-columns: repeat(3, auto); gap: 6px 12px; align-items: center;">
+        <label style="display:flex; align-items:center; gap:0px; white-space:nowrap;">
+          <input type="radio" name="subestacao" value="1" style="margin:0 0px 0 0; vertical-align:middle;">
+          Subestação N°1
+        </label>
+        <label style="display:flex; align-items:center; gap:0px; white-space:nowrap;">
+          <input type="radio" name="subestacao" value="2" style="margin:0 0px 0 0; vertical-align:middle;">
+          Subestação N°2
+        </label>
+        <label style="display:flex; align-items:center; gap:0px; white-space:nowrap;">
+          <input type="radio" name="subestacao" value="4" style="margin:0 0px 0 0; vertical-align:middle;">
+          Subestação N°4
+        </label>
+        <label style="display:flex; align-items:center; gap:0px; white-space:nowrap;">
+          <input type="radio" name="subestacao" value="5" style="margin:0 0px 0 0; vertical-align:middle;">
+          Subestação N°5
+        </label>
+        <label style="display:flex; align-items:center; gap:0px; white-space:nowrap;">
+          <input type="radio" name="subestacao" value="6" style="margin:0 0px 0 0; vertical-align:middle;">
+          Subestação N°6
+        </label>
+        <label style="display:flex; align-items:center; gap:0px; white-space:nowrap;">
+          <input type="radio" name="subestacao" value="8" style="margin:0 0px 0 0; vertical-align:middle;">
+          Subestação N°8
+        </label>
+      </div>
+
+
+      <label>Modalidade de conexão do Gerador</label>
+      <div class="radio-group">
+        <label><input type="radio" name="paralelismo" value="momentaneo"> Momentâneo (Diesel)</label>
+        <label><input type="radio" name="paralelismo" value="permanente"> Permanente</label>
+        <label><input type="radio" name="paralelismo" value="emergencial"> Emergência</label>
+        <label><input type="radio" name="paralelismo" value="nenhum"> Nenhum</label>
+      </div>
+
+      <div id="camposExtras">
+        <label>Modalidade de Injeção na Rede</label>
+        <div class="radio-group">
+          <label><input type="radio" name="injecao" value="com"> Com Injeção</label>
+          <label><input type="radio" name="injecao" value="sem"> Sem Injeção</label>
+        </div>
+
+        <label>Modalidade de conexão da Usina</label>
+        <div class="radio-group">
+          <label><input type="radio" name="inversor" value="com"> Com Inversor</label>
+          <label><input type="radio" name="inversor" value="sem"> Sem Inversor</label>
+        </div>
+
+        <label>Faixa de Potência da GD</label>
+        <div class="radio-group">
+          <label><input type="radio" name="faixa_gd" value="ate_75"> Até 75 kW</label>
+          <label><input type="radio" name="faixa_gd" value="75_300"> 75 kW até 300 kW</label>
+          <label><input type="radio" name="faixa_gd" value="300_2500"> 300 kW até 2500 kW</label>
+        </div>
+
+        <label>Período do Parecer de Acesso (Considerando conexão da usina em andamento)</label>
+        <div class="radio-group">
+          <label><input type="radio" name="parecer" value="antes"> Antes 15/01/2024</label>
+          <label><input type="radio" name="parecer" value="apos"> Após 15/01/2024</label>
+        </div>
+      </div>
+
+      <button type="submit">Enviar</button>
+    </form>
+
+    <div class="resultado" id="resultado-protecoesdegeracao"></div>
+
+
+
+
+  </div>
 
 
 

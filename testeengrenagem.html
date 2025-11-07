@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Múltiplas Tabelas com Status</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    .pendente { background-color: #fff3cd; }
+    .aprovado { background-color: #d4edda; }
+    .reprovado { background-color: #f8d7da; }
+    button {
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Seletor de Tabela</h2>
+  <select id="seletorTabela">
+    <option value="tabela1">Tabela 1</option>
+    <option value="tabela2">Tabela 2</option>
+  </select>
+
+  <button onclick="limparTabelaAtual()">Limpar Status e Comentários</button>
+
+  <div class="tabela-status" data-id="tabela1"></div>
+  <div class="tabela-status" data-id="tabela2"></div>
+
+  <script>
+    const itensPorTabela = {
+      tabela1: ["Item A1", "Item A2", "Item A3"],
+      tabela2: ["Item B1", "Item B2", "Item B3"]
+    };
+
+    function salvarDados(tabelaId) {
+      const tabela = document.querySelector(`.tabela-status[data-id="${tabelaId}"] tbody`);
+      const dados = [];
+      tabela.querySelectorAll("tr").forEach(row => {
+        const item = row.querySelector("td").textContent;
+        const status = row.querySelector("select").value;
+        const comentario = row.querySelector("input").value;
+        dados.push({ item, status, comentario });
+      });
+      localStorage.setItem(`dados_${tabelaId}`, JSON.stringify(dados));
+    }
+
+    function aplicarCor(row, status) {
+      row.classList.remove("pendente", "aprovado", "reprovado");
+      if (status === "pendente") row.classList.add("pendente");
+      if (status === "aprovado") row.classList.add("aprovado");
+      if (status === "reprovado") row.classList.add("reprovado");
+    }
+
+    function criarLinha(tabelaId, item, status = "pendente", comentario = "") {
+      const tabela = document.querySelector(`.tabela-status[data-id="${tabelaId}"] tbody`);
+      const row = document.createElement("tr");
+
+      const tdItem = document.createElement("td");
+      tdItem.textContent = item;
+
+      const tdStatus = document.createElement("td");
+      const select = document.createElement("select");
+      ["pendente", "aprovado", "reprovado"].forEach(opt => {
+        const option = document.createElement("option");
+        option.value = opt;
+        option.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
+        if (opt === status) option.selected = true;
+        select.appendChild(option);
+      });
+      select.addEventListener("change", () => {
+        aplicarCor(row, select.value);
+        salvarDados(tabelaId);
+      });
+      tdStatus.appendChild(select);
+
+      const tdComentario = document.createElement("td");
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = comentario;
+      input.addEventListener("input", () => salvarDados(tabelaId));
+      tdComentario.appendChild(input);
+
+      row.appendChild(tdItem);
+      row.appendChild(tdStatus);
+      row.appendChild(tdComentario);
+
+      aplicarCor(row, status);
+      tabela.appendChild(row);
+    }
+
+    function montarTabela(tabelaId) {
+      const container = document.querySelector(`.tabela-status[data-id="${tabelaId}"]`);
+      container.innerHTML = `
+        <h3>${tabelaId}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Status</th>
+              <th>Comentário</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      `;
+
+      const dadosSalvos = JSON.parse(localStorage.getItem(`dados_${tabelaId}`));
+      if (dadosSalvos) {
+        dadosSalvos.forEach(d => criarLinha(tabelaId, d.item, d.status, d.comentario));
+      } else {
+        itensPorTabela[tabelaId].forEach(item => criarLinha(tabelaId, item));
+      }
+    }
+
+    function limparTabelaAtual() {
+      const tabelaId = document.getElementById("seletorTabela").value;
+      const tabela = document.querySelector(`.tabela-status[data-id="${tabelaId}"] tbody`);
+      tabela.querySelectorAll("tr").forEach(row => {
+        const select = row.querySelector("select");
+        const input = row.querySelector("input");
+        select.value = "pendente";
+        input.value = "";
+        aplicarCor(row, "pendente");
+      });
+      salvarDados(tabelaId);
+    }
+
+    // Inicializar todas as tabelas
+    Object.keys(itensPorTabela).forEach(montarTabela);
+  </script>
+</body>
+</html>

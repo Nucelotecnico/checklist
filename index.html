@@ -1,105 +1,258 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8" />
-    <title>Login</title>
-
-
-</head>
-<style>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1"></script>
+  <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #008b458a;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #008b458a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      margin: 0;
     }
 
     .container {
-        background-color: rgb(4, 75, 16);
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        text-align: center;
+      background-color: rgb(4, 75, 16);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 400px;
     }
 
-    h2 {
-        color: #d4fa00;
+    h2, label {
+      color: #d4fa00;
+      font-weight: bold;
     }
 
-    label {
-        display: block;
-        margin-top: 15px;
-        font-weight: bold;
-       color: #d4fa00;
-    }
-
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
 
     button {
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #045819;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #045819;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
     }
 
     button:hover {
-        background-color: #0d3b02;
+      background-color: #0d3b02;
     }
-</style>
 
+    #painelAdmin {
+      background-color: #fff;
+      margin-top: 40px;
+      padding: 30px;
+      border-radius: 10px;
+      width: 600px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #045819;
+      color: white;
+    }
+  </style>
+</head>
 <body>
-    <div class="container">
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <div id="icon-corner" style="width: 60px; height: 40px; margin-bottom: 10px;"></div>
+<div class="container">
+    <h2>PORTAL<br>NÚCLEO TÉCNICO</h2>
+    <label>Usuário:</label>
+    <input type="text" id="usuario">
+    <label>Senha:</label>
+    <input type="password" id="senha">
+    <button type="button" onclick="verificarLogin()">Entrar</button>
+</div>
 
+  <!-- Painel Administrativo -->
+  <div id="painelAdmin" style="display: none;">
+    <h2 style="color: #045819;">Painel Administrativo</h2>
+    <label style="color: #045819;">Login:</label>
+    <input type="text" id="novoLogin">
+    <label style="color: #045819;">Senha:</label>
+    <input type="password" id="novaSenha">
+    <label style="color: #045819;">Tipo:</label>
+    <select id="tipo">
+      <option value="administrador">Administrador</option>
+      <option value="usuario">Usuário</option>
+      <option value="convidado">Convidado</option>
+    </select>
+    <button onclick="cadastrarUsuario()">Cadastrar</button>
+    <button onclick="alterarUsuario()">Alterar</button>
+    <button onclick="excluirUsuario()">Excluir</button>
 
+    <h3 style="color: #045819;">Usuários Cadastrados</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Login</th>
+          <th>Tipo</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaUsuarios"></tbody>
+    </table>
+  </div>
 
-        </div>
-        <h2 style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 2em; color: #d4fa00; font-weight: 600; letter-spacing: 1px; margin-bottom: 20px;">PORTAL<br>NÚCLEO TÉCNICO</h2>
-        <form onsubmit="return verificarLogin()">
-            <label>Usuário:</label>
-            <input type="text" id="usuario" required>
-            <label>Senha:</label>
-            <input type="password" id="senha" required>
-            <button type="submit">Entrar</button>
-        </form>
-    </div>
-    </div>
+  <script>
+    const supabaseClient = supabase.createClient(
+      'https://nelzhukmxrgdoarsxcek.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lbHpodWtteHJnZG9hcnN4Y2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMDIxNzUsImV4cCI6MjA3MTU3ODE3NX0.KHvfJHVimKwiraEzbyZWyLnTO5P5VEvM86GlyE7y09k'
+    );
 
-    <script>
+    let usuarioAtual = null;
 
+    async function verificarLogin() {
+        const user = document.getElementById("usuario").value.trim();
+        const pass = document.getElementById("senha").value.trim();
 
-        function verificarLogin() {
-            const user = document.getElementById("usuario").value;
-            const pass = document.getElementById("senha").value;
+        const { data, error } = await supabaseClient
+            .from('autenticacao')
+            .select('*')
+            .eq('login', user)
+            .eq('senha', pass);
 
-            if (user === "admin" && pass === "12345") {
-                window.location.href = "checklist.html";
-                return false;
-            } else {
-                alert("Login ou senha incorretos.");
-                return false;
-            }
+        if (error || !data || data.length === 0) {
+            alert("Login ou senha incorretos.");
+            return false;
         }
 
-    </script>
+        console.log("Senha OK");
 
+        usuarioAtual = data[0];
 
+        // Buscar login, senha e tipo do usuário com id 1 e exibir no console
+        const { data: adminData, error: adminError } = await supabaseClient
+            .from('autenticacao')
+            .select('login, senha, tipo')
+            .eq('id', 1)
+            .single();
+
+        if (!adminError && adminData) {
+            console.log("Admin ID 1:", adminData);
+        } else {
+            console.log("Erro ao buscar admin ID 1");
+        }
+
+        if (usuarioAtual.id === 1) {
+            mostrarPainel();
+            carregarUsuarios();
+        } else {
+            window.location.href = "checklist.html";
+        }
+
+                if (usuarioAtual.login === "tecnico" && usuarioAtual.tipo === "usuario") {
+            window.location.href = "checklist.html";
+        }
+
+        if (usuarioAtual.login === "coordenador" && usuarioAtual.tipo === "administrador") {
+            window.location.href = "checklist.html";
+        }
+
+        if (usuarioAtual.login === "admin" && usuarioAtual.tipo === "administrador") {
+            mostrarPainel();
+            carregarUsuarios();
+        }
+
+        return false;
+    }
+
+    function mostrarPainel() {
+      document.getElementById("painelAdmin").style.display = "block";
+    }
+
+    async function carregarUsuarios() {
+      const { data, error } = await supabaseClient
+        .from('autenticacao')
+        .select('id, login, tipo')
+        .order('id', { ascending: true });
+
+      if (error) {
+        alert("Erro ao carregar usuários");
+        return;
+      }
+
+      const tbody = document.getElementById("tabelaUsuarios");
+      tbody.innerHTML = "";
+
+      data.forEach(user => {
+        const row = `<tr><td>${user.id}</td><td>${user.login}</td><td>${user.tipo}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    async function cadastrarUsuario() {
+      const login = document.getElementById("novoLogin").value.trim();
+      const senha = document.getElementById("novaSenha").value.trim();
+      const tipo = document.getElementById("tipo").value;
+
+      const { error } = await supabaseClient
+        .from('autenticacao')
+        .insert([{ login, senha, tipo }]);
+
+      if (error) alert("Erro ao cadastrar");
+      else {
+        alert("Usuário cadastrado");
+        carregarUsuarios();
+      }
+    }
+
+    async function alterarUsuario() {
+      const login = document.getElementById("novoLogin").value.trim();
+      const senha = document.getElementById("novaSenha").value.trim();
+      const tipo = document.getElementById("tipo").value;
+
+      const { error } = await supabaseClient
+        .from('autenticacao')
+        .update({ senha, tipo })
+        .eq('login', login);
+
+      if (error) alert("Erro ao alterar");
+      else {
+        alert("Usuário alterado");
+        carregarUsuarios();
+      }
+    }
+
+    async function excluirUsuario() {
+      const login = document.getElementById("novoLogin").value.trim();
+
+      const { error } = await supabaseClient
+        .from('autenticacao')
+        .delete()
+        .eq('login', login);
+
+      if (error) alert("Erro ao excluir");
+      else {
+        alert("Usuário excluído");
+        carregarUsuarios();
+      }
+    }
+  </script>
 </body>
-
 </html>
