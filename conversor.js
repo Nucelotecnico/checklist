@@ -886,6 +886,59 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             circulo.textContent = funcao;
             resultadoDiv.appendChild(circulo);
         });
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        if ((parecer === "apos" && (subestacao === "1" || subestacao === "6"))) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N1N6_G_PERM_COM_INVERS.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N1N6_G_PERM_COM_INVERS";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+        if ((parecer === "apos" && (subestacao === "5" || subestacao === "8"))) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N5N8_G_PERM_COM_INVERS.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N5N8_G_PERM_COM_INVERS";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
     }
 
     //Condição para permantente
@@ -923,6 +976,58 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             circulo.textContent = funcao;
             resultadoDiv.appendChild(circulo);
         });
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+
+        if ((parecer === "antes" && (subestacao === "1" || subestacao === "6"))) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N1N6_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N1N6_SEM_GERADOR";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+        if ((parecer === "antes" && (subestacao === "5" || subestacao === "8"))) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N5N8_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N5N8_SEM_GERADOR";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
     }
 
     //Condição para permantente 
@@ -961,6 +1066,64 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             circulo.textContent = funcao;
             resultadoDiv.appendChild(circulo);
         });
+
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        if (paralelismo === "permanente" && (subestacao === "1" || subestacao === "6")) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N1N6_G_PERM_SEM_INVERS.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N1N6_G_PERM_SEM_INVERS";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+        if (paralelismo === "permanente" && (subestacao === "5" || subestacao === "8")) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N5N8_G_PERM_SEM_INVERS.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N5N8_G_PERM_SEM_INVERS";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+
+
+
+
+
     }
 
     //define exibição para proteção de paralelismo momentaneo na MT
@@ -1211,6 +1374,46 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             circulo.textContent = funcao;
             resultadoDiv.appendChild(circulo);
         });
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        // Exibe diagrama "SE_N5N8_G_PERM_SEM_INVERS"
+        if (parecer === "apos" && (subestacao === "2" || subestacao === "4")) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N2N4_G_PERM_COM_INVERS.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N2N4_G_PERM_COM_INVERS";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+
     }
 
     //Condição para permantente ,com ou sem injeção,com inversor, de 75 ate 300 kw , antes 15/01/2024,se subestação 2,4
@@ -1243,6 +1446,53 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             circulo.textContent = funcao;
             resultadoDiv.appendChild(circulo);
         });
+
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        // Exibe diagrama "SE_N2N4_G_PERM_SEM_INVERS"
+        if (parecer === "antes" && (subestacao === "2" || subestacao === "4")) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N2N4_SEM_GERADOR.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N2N4_SEM_GERADOR";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+
+
+
+
+
+
+
     }
 
     //Condição para permantente ,com ou sem injeção,com inversor, de 300 ate 2500 kw , antes ou apos 15/01/2024,se subestação 2,4
@@ -1275,10 +1525,55 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             circulo.textContent = funcao;
             resultadoDiv.appendChild(circulo);
         });
+
+
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        // Exibe diagrama "SE_N2N4_G_PERM_SEM_INVERS"
+        if ((subestacao === "2" || subestacao === "4")) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N2N4_G_PERM_COM_INVERS.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N2N4_G_PERM_COM_INVERS";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
     }
 
 
-    //Condição para permantente ,com ou sem injeção,sem inversor, ate 75 ou de 75 a 300, antes ou apos 15/01/2024,se subestação 2,4
+    //Condição para permantente ,
+    // com ou sem injeção,
+    // sem inversor, 
+    // ate 75 ou de 75 a 300, 
+    // antes ou apos 15/01/2024,
+    // se subestação 2,4
     if (
         (subestacao === "2" || subestacao === "4") &&
         paralelismo === "permanente" &&
@@ -1308,10 +1603,59 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             circulo.textContent = funcao;
             resultadoDiv.appendChild(circulo);
         });
+
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+        // Exibe diagrama "SE_N2N4_G_PERM_SEM_INVERS"
+        if ((subestacao === "2" || subestacao === "4")) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N2N4_G_PERM_SEM_INVERS.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N2N4_G_PERM_SEM_INVERS";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
+
+
+
+
+
+
     }
 
 
-    //Condição para permantente ,com ou sem injeção,sem inversor, de 300 a 2500, apos 15/01/2024,se subestação 2,4
+    //Condição para permantente ,
+    // com ou sem injeção,
+    // sem inversor, 
+    // de 300 a 2500, 
+    // apos 15/01/2024,
+    // se subestação 2,4
     if (
         (subestacao === "2" || subestacao === "4") &&
         paralelismo === "permanente" &&
@@ -1341,9 +1685,46 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             circulo.textContent = funcao;
             resultadoDiv.appendChild(circulo);
         });
+
+                // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
+        if (circulos.length > 0) {
+            const funcoesContainer = document.createElement('div');
+            funcoesContainer.style.display = 'flex';
+            funcoesContainer.style.justifyContent = 'center';
+            funcoesContainer.style.alignItems = 'center';
+            funcoesContainer.style.flexDirection = 'row';
+            funcoesContainer.style.gap = '10px';
+            circulos.forEach(c => funcoesContainer.appendChild(c));
+
+            // limpa resultadoDiv e organiza para empilhar (funções em cima, imagem em baixo)
+            resultadoDiv.innerHTML = '';
+            resultadoDiv.style.display = 'flex';
+            resultadoDiv.style.flexDirection = 'column';
+            resultadoDiv.style.justifyContent = 'center';
+            resultadoDiv.style.alignItems = 'center';
+            resultadoDiv.style.gap = '10px';
+
+            resultadoDiv.appendChild(funcoesContainer);
+        }
+
+
+        // Exibe diagrama "SE_N2N4_G_PERM_SEM_INVERS"
+        if ((subestacao === "2" || subestacao === "4")) {
+            const img = document.createElement("img");
+            img.src = "Diagramas_unifilares/SE_N2N4_G_PERM_SEM_INVERS.png"; // ajuste o caminho se necessário
+            img.alt = "Diagrama SE_N2N4_G_PERM_SEM_INVERS";
+            img.style.borderRadius = "12px";
+            img.style.border = "2px solid #000";
+            img.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+            img.style.maxWidth = "800px";
+            img.style.width = "100%";
+            img.style.display = "block";
+            img.style.marginTop = "10px";
+            resultadoDiv.appendChild(img);
+        }
+
     }
-
-
 
 
 
