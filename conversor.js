@@ -9,6 +9,7 @@ document.getElementById('ferramentaSelector').addEventListener('change', functio
     document.getElementById('PesquisarRTs').style.display = valor === 'PesquisarRTs' ? 'block' : 'none';
     document.getElementById('equipamentosaterramento').style.display = valor === 'equipamentosaterramento' ? 'block' : 'none';
     document.getElementById('protecoesdegeracao').style.display = valor === 'protecoesdegeracao' ? 'block' : 'none';
+    document.getElementById('Gerenciador de Textos de Reprovação').style.display = valor === 'Gerenciador de Textos de Reprovação' ? 'block' : 'none';
 });
 
 
@@ -1686,7 +1687,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             resultadoDiv.appendChild(circulo);
         });
 
-                // Agrupa os círculos já adicionados para que a imagem fique abaixo
+        // Agrupa os círculos já adicionados para que a imagem fique abaixo
         const circulos = Array.from(resultadoDiv.querySelectorAll('.circulo'));
         if (circulos.length > 0) {
             const funcoesContainer = document.createElement('div');
@@ -1774,6 +1775,139 @@ document.querySelectorAll('input[name="subestacao"]').forEach(radio => {
 
 
 
+
+//INICIO LOGICA PARA ITENS DE REPROVAÇÃO 
+
+
+
+const supabaseUrl = 'https://nelzhukmxrgdoarsxcek.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lbHpodWtteHJnZG9hcnN4Y2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwMDIxNzUsImV4cCI6MjA3MTU3ODE3NX0.KHvfJHVimKwiraEzbyZWyLnTO5P5VEvM86GlyE7y09k';
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+let reprovadorEdicaoId = null;
+
+async function reprovadorCadastrar() {
+    const topico = document.getElementById('reprovador-topico').value;
+    const descricao = document.getElementById('reprovador-descricao').value;
+
+    const { error } = await supabaseClient
+        .from('reprovacoes')
+        .insert([{ topico, descricao }]);
+
+    alert(error ? 'Erro ao cadastrar' : 'Cadastro realizado com sucesso');
+}
+
+async function reprovadorPesquisar() {
+    const termo = document.getElementById('reprovador-pesquisa').value;
+
+    const { data, error } = await supabaseClient
+        .from('reprovacoes')
+        .select('*')
+        .or(`topico.ilike.%${termo}%,descricao.ilike.%${termo}%`);
+
+    const resultados = document.getElementById('reprovador-resultados');
+    resultados.innerHTML = '';
+
+    if (error) {
+        resultados.innerHTML = '<p>Erro na pesquisa.</p>';
+        return;
+    }
+
+    if (data.length > 0) {
+        data.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'reprovador-item';
+            itemDiv.innerHTML = `
+        <div class="reprovador-item-texto">
+          <div class="reprovador-item-topico">${item.topico}</div>
+          <div>${item.descricao}</div>
+        </div>
+        <div class="reprovador-item-buttons">
+          <button class="reprovador-btn" onclick="reprovadorEditar('${item.id}', \`${item.descricao.replace(/`/g, '\\`')}\`)">Editar</button>
+          <button class="reprovador-btn reprovador-btn-excluir" onclick="reprovadorExcluir('${item.id}')">Excluir</button>
+        </div>
+      `;
+            resultados.appendChild(itemDiv);
+        });
+    } else {
+        resultados.innerHTML = '<p>Nenhum resultado encontrado.</p>';
+    }
+}
+
+function reprovadorEditar(id, textoAtual) {
+    reprovadorEdicaoId = id;
+    document.getElementById('reprovador-modal-texto').value = textoAtual;
+
+    document.getElementById('reprovador-modal').style.display = 'flex';
+}
+
+function reprovadorFecharModal() {
+    document.getElementById('reprovador-modal').style.display = 'none';
+    reprovadorEdicaoId = null;
+}
+
+async function reprovadorSalvarEdicao() {
+    const novaDescricao = document.getElementById('reprovador-modal-texto').value.trim();
+    if (!novaDescricao) {
+        alert('O texto não pode estar vazio.');
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from('reprovacoes')
+        .update({ descricao: novaDescricao })
+        .eq('id', reprovadorEdicaoId);
+
+    alert(error ? 'Erro ao editar' : 'Texto editado com sucesso');
+    reprovadorFecharModal();
+    reprovadorPesquisar();
+}
+
+async function reprovadorExcluir(id) {
+    if (!confirm('Tem certeza que deseja excluir este item?')) return;
+
+    const { error } = await supabaseClient
+        .from('reprovacoes')
+        .delete()
+        .eq('id', id);
+
+    alert(error ? 'Erro ao excluir' : 'Texto excluído com sucesso');
+    reprovadorPesquisar();
+}
+
+//FIM LOGICA PARA ITENS DE REPROVAÇÃO
+
+
+
+window.addEventListener('DOMContentLoaded', () => {
+//codigo para exibir/ocultar painel de cadastro
+document.getElementById('toggle-cadastro-btn').addEventListener('click', () => {
+    const panel = document.getElementById('cadastro-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    if (panel.style.display === 'block') {
+        // foca o campo de descrição quando abrir
+        document.getElementById('reprovador-descricao').focus();
+    }
+});
+document.getElementById('fechar-cadastro-btn').addEventListener('click', () => {
+    document.getElementById('cadastro-panel').style.display = 'none';
+});
+// Fim do codigo para exibir/ocultar painel de cadastro
+
+
+
+// Permitir pesquisa ao pressionar Enter quando tiver selecionado o campo de pesquisa
+document.getElementById('reprovador-pesquisa').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        reprovadorPesquisar();
+    }
+});
+
+
+
+
+
 // console.log("valorSelecionado2:", valor);
 document.addEventListener("keydown", function (event) {
     if (event.key === "Enter" && valor === "conversorCoordenadas") {
@@ -1786,4 +1920,6 @@ document.addEventListener("keydown", function (event) {
     if (event.key === "Enter" && valor === "equipamentosaterramento") {
         calcular();
     }
+});
+
 });

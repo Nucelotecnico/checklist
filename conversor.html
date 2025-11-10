@@ -47,6 +47,7 @@
       <!-- Adicione mais opções conforme necessário -->
       <option value="equipamentosaterramento">Equipamentos de Aterramento</option>
       <option value="protecoesdegeracao">Proteções de Geração</option>
+      <option value="Gerenciador de Textos de Reprovação">Gerenciador de Textos de Reprovação</option>
     </select>
   </div>
 
@@ -173,7 +174,8 @@
 
 
       <label>Modalidade de conexão do Gerador</label>
-      <div class="radio-group" style="display:flex; justify-content:center; align-items:center; gap:18px; flex-wrap:wrap;">
+      <div class="radio-group"
+        style="display:flex; justify-content:center; align-items:center; gap:18px; flex-wrap:wrap;">
         <label><input type="radio" name="paralelismo" value="momentaneo"> Momentâneo (Diesel)</label>
         <label><input type="radio" name="paralelismo" value="permanente"> Permanente</label>
         <label><input type="radio" name="paralelismo" value="emergencial"> Emergência</label>
@@ -217,12 +219,82 @@
 
   </div>
 
+  <div id="Gerenciador de Textos de Reprovação" style="display:none;">
+
+    <div class="itens-container" id="itens-container">
+      <!-- Itens serão inseridos aqui via JavaScript -->
+
+      <div id="reprovador-container">
+        <h1>Gerenciador de Textos de Reprovação</h1>
+
+        <button type="button" id="toggle-cadastro-btn" class="reprovador-btn" style="margin-bottom:10px;">
+          Cadastrar Item de Reprovação
+        </button>
+      </div>
+
+      <div id="cadastro-panel" style="display:none;">
+        <label for="reprovador-topico">Tópico:</label>
+        <select id="reprovador-topico">
+          <option value="ART de Projeto">ART de Projeto</option>
+          <option value="Aterramento Elétrico">Aterramento Elétrico</option>
+          <option value="Diagrama Multifilar">Diagrama Multifilar</option>
+          <option value="Diagrama Unifilar">Diagrama Unifilar</option>
+          <option value="Estudo de proteção">Estudo de proteção</option>
+          <option value="Folha de Selo">Folha de Selo</option>
+          <option value="Fluxo de solicitação">Fluxo de solicitação</option>
+          <option value="Gerador a Diesel">Gerador a Diesel</option>
+          <option value="Layout do Projeto">Layout do Projeto</option>
+          <option value="Lista de materiais da Subestação">Lista de materiais da Subestação</option>
+          <option value="Notas obrigatórias">Notas obrigatórias</option>
+          <option value="Planta Localização">Planta Localização</option>
+          <option value="Proteções Elétricas">Proteções Elétricas</option>
+          <option value="Ramal de Entrada">Ramal de Entrada</option>
+          <option value="Relação de cargas">Relação de cargas</option>
+          <option value="Relé da Subestação">Relé da Subestação</option>
+          <option value="Segurança da Subestação">Segurança da Subestação</option>
+          <option value="Sem anexos">Sem anexos</option>
+          <option value="TC de Proteção">TC de Proteção</option>
+          <option value="TP de Proteção">TP de Proteção</option>
+          <option value="Transformador de Potência">Transformador de Potência</option>
+          <option value="Vistas da Subestação">Vistas da Subestação</option>
+          <option value="Outros">Outros</option>
+        </select>
 
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <label for="reprovador-descricao">Texto de Reprovação:</label>
+        <textarea id="reprovador-descricao" rows="4" placeholder="Digite o texto de reprovação..."></textarea>
 
+        <button class="reprovador-btn" onclick="reprovadorCadastrar()">Cadastrar</button>
 
-  <script src="conversor.js"></script>
+        <hr>
+
+      </div>
+
+      <div id="reprovador-container">
+        <label for="reprovador-pesquisa">Pesquisar por Tópico:</label>
+        <input type="text" id="reprovador-pesquisa" placeholder="Digite o nome do tópico...">
+        <button class="reprovador-btn" onclick="reprovadorPesquisar()">Pesquisar</button>
+
+        <div id="reprovador-resultados"></div>
+      </div>
+
+      <!-- Modal de Edição -->
+      <div id="reprovador-modal">
+        <div id="reprovador-modal-content">
+          <h3>Editar Texto de Reprovação</h3>
+          <textarea id="reprovador-modal-texto" rows="10"></textarea>
+          <div id="reprovador-modal-buttons">
+            <button class="reprovador-btn" onclick="reprovadorSalvarEdicao()">Salvar</button>
+            <button class="reprovador-btn reprovador-btn-excluir" onclick="reprovadorFecharModal()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="conversor.js"></script>
 
 
 </body>
