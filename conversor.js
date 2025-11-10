@@ -1877,8 +1877,6 @@ async function reprovadorExcluir(id) {
 
 //FIM LOGICA PARA ITENS DE REPROVAÇÃO
 
-
-
 window.addEventListener('DOMContentLoaded', () => {
 //codigo para exibir/ocultar painel de cadastro
 document.getElementById('toggle-cadastro-btn').addEventListener('click', () => {
@@ -1893,22 +1891,21 @@ document.getElementById('fechar-cadastro-btn').addEventListener('click', () => {
     document.getElementById('cadastro-panel').style.display = 'none';
 });
 // Fim do codigo para exibir/ocultar painel de cadastro
-
-
-
-// Permitir pesquisa ao pressionar Enter quando tiver selecionado o campo de pesquisa
-document.getElementById('reprovador-pesquisa').addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        reprovadorPesquisar();
-    }
 });
 
 
+// Permitir pesquisa ao pressionar Enter quando tiver selecionado o campo de pesquisa
+const pesquisaEl = document.getElementById('reprovador-pesquisa');
+if (pesquisaEl) {
+    pesquisaEl.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            reprovadorPesquisar();
+        }
+    });
+}
 
-
-
-// console.log("valorSelecionado2:", valor);
+// Permitir submissão ao pressionar Enter em diferentes formulários
 document.addEventListener("keydown", function (event) {
     if (event.key === "Enter" && valor === "conversorCoordenadas") {
         converterEPlotar();
@@ -1922,4 +1919,3 @@ document.addEventListener("keydown", function (event) {
     }
 });
 
-});
