@@ -124,7 +124,15 @@
       </select>
 
       <label for="potencia">Potência de geração (kVA):</label>
-      <input type="number" id="potencia" placeholder="Ex: 1500" />
+      <select id="potencia">
+        <option value="">-- Selecione (kVA) --</option>
+        <option value="500">até 500 kVA</option>
+        <option value="1000">maior que 500 kVA até 1000 kVA</option>
+        <option value="2000">maior que 1000 kVA até 2000 kVA</option>
+        <option value="3000">maior que 2000 kVA até 3000 kVA</option>
+        <option value="4000">maior que 3000 kVA até 4000 kVA</option>
+        <option value="5000">maior que 4000 kVA até 5000 kVA</option>
+      </select>
 
       <label for="tensao">Nível de tensão:</label>
       <select id="tensao">
@@ -271,8 +279,8 @@
       </div>
 
       <div id="reprovador-container">
-        <label for="reprovador-pesquisa">Pesquisar por Tópico:</label>
-        <input type="text" class="botaoconfirmacao"id="reprovador-pesquisa" placeholder="Digite o nome do tópico...">
+        <label for="reprovador-pesquisa">Pesquisar por Item de Reprovação:</label>
+        <input type="text" id="reprovador-pesquisa" placeholder="Digite o nome do item...">
         <button class="reprovador-btn" onclick="reprovadorPesquisar()">Pesquisar</button>
 
         <div id="reprovador-resultados"></div>
@@ -290,11 +298,12 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="conversor.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="conversor.js"></script>
 
 
 </body>
