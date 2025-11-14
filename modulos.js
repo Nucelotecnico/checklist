@@ -19,7 +19,29 @@ async function listarProjetos(filtro = '*') {
         return;
     }
 
+    //const projetos = filtro === '*' ? data : data.filter(item => item.name.includes(filtro));
+
+
+// ...existing code...
     const projetos = filtro === '*' ? data : data.filter(item => item.name.includes(filtro));
+
+    // função que remove sufixo numérico (timestamp) e extensao para ordenar pelo nome "limpo"
+    const cleanName = (name) =>
+      name
+        .replace(/(?:[_-]\d{6,})(?=\.[^.]+$)/g, '') // remove sufixos numéricos (timestamps)
+        .replace(/\.[^.]+$/, '')                   // remove extensão (.pdf)
+        .toLowerCase()
+        .trim();
+
+    // collator para ordenar corretamente em português (case-insensitive)
+    const collator = new Intl.Collator('pt', { sensitivity: 'base', numeric: false });
+
+    projetos.sort((a, b) => collator.compare(cleanName(a.name), cleanName(b.name)));
+    
+// ...existing code...
+
+
+
 
     if (!projetos || projetos.length === 0) {
         resultado.innerHTML = `<p>Nenhum projeto encontrado.</p>`;
@@ -41,20 +63,28 @@ async function listarProjetos(filtro = '*') {
 
     const corpoTabela = document.getElementById('tabelaProjetos');
 
-    for (const item of projetos) {
-        const caminho = `projetos/${item.name}`;
-        const { data: urlData } = supabase.storage
-            .from('Projetos_modulos_blindados')
-            .getPublicUrl(caminho);
+for (const item of projetos) {
+    const caminho = `projetos/${item.name}`;
+    const { data: urlData } = supabase.storage
+        .from('Projetos_modulos_blindados')
+        .getPublicUrl(caminho);
 
-        const linha = document.createElement('tr');
-        linha.innerHTML = `
-          <td>${item.name}</td>
-          <td><a href="${urlData.publicUrl}" target="_blank">Visualizar PDF</a></td>
-          <td><button class="excluir" onclick="excluirProjeto('${caminho}')">Excluir</button></td>
-        `;
-        corpoTabela.appendChild(linha);
-    }
+    // remove sufixo _123456... antes da extensão e melhora leitura substituindo _ por espaço
+    const displayName = item.name
+      .replace(/(?:[_-]\d{13})(?=\.[^.]+$)/, '')   // remove timestamp de 13 dígitos
+      .replace(/\s+/g, '_')                       // converte espaços em underscore
+      .replace(/__+/g, '_')                       // colapsa underscores duplicados
+      .trim();
+
+    const linha = document.createElement('tr');
+    linha.innerHTML = `
+      <td>${displayName}</td>
+      <td><a href="${urlData.publicUrl}" target="_blank">Visualizar PDF</a></td>
+      <td><button class="excluir" onclick="excluirProjeto('${caminho}')">Excluir</button></td>
+    `;
+    corpoTabela.appendChild(linha);
+}
+
 }
 
 window.excluirProjeto = async function (caminho) {
@@ -80,33 +110,52 @@ window.excluirProjeto = async function (caminho) {
 
 window.addEventListener('DOMContentLoaded', () => listarProjetos());
 
+// ...existing code...
 document.getElementById('formProjeto').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const nome = document.getElementById('nomeProjeto').value.trim();
+    const nomeRaw = document.getElementById('nomeProjeto').value.trim();
     const arquivo = document.getElementById('arquivoPDF').files[0];
-
-    if (!nome || !arquivo) {
+    if (!nomeRaw || !arquivo) {
         alert('Preencha todos os campos.');
         return;
     }
 
-    const nomeArquivo = `projetos/${nome.replace(/\s+/g, '_')}_${Date.now()}.pdf`;
+const nomeSanitizado = nomeRaw
+    .replace(/[^a-zA-Z0-9À-ÿ\s_-]/g, '') // permite letras, números, espaços, underscore e hífen
+    .replace(/\s+/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '');
 
-    const { error } = await supabase.storage
+    const filename = `${nomeSanitizado}.pdf`;
+    const caminho = `projetos/${filename}`;
+
+    // DEBUG: logar nomes e objeto file
+    console.log('nomeRaw:', nomeRaw);
+    console.log('nomeSanitizado:', nomeSanitizado);
+    console.log('filename pretendido:', filename);
+    console.log('caminho pretendido:', caminho);
+    console.log('arquivo.name (nome do arquivo no disco):', arquivo.name);
+
+    // upload com upsert para forçar substituição
+    const { data: uploadData, error: uploadError } = await supabase.storage
         .from('Projetos_modulos_blindados')
-        .upload(nomeArquivo, arquivo);
+        .upload(caminho, arquivo, { upsert: true });
 
-    if (error) {
+    if (uploadError) {
         alert('Erro ao enviar o PDF');
-        console.error(error);
+        console.error('uploadError', uploadError);
         return;
     }
+
+    // DEBUG: ver retorno do Supabase
+    console.log('uploadData:', uploadData);
 
     alert('Projeto cadastrado com sucesso!');
     document.getElementById('formProjeto').reset();
     listarProjetos();
 });
+// ...existing code...
 
 document.getElementById('btnBuscar').addEventListener('click', () => {
     const nomeBusca = document.getElementById('buscaProjeto').value.trim().replace(/\s+/g, '_');
